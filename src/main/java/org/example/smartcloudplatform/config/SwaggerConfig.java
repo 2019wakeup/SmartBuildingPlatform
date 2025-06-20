@@ -22,10 +22,6 @@ public class SwaggerConfig {
                         .title("智能云平台管理系统API文档")
                         .description("基于SpringBoot3 + MyBatis Plus的前后端分离管理系统")
                         .version("1.0.0")
-                        .contact(new Contact()
-                                .name("SmartCloudPlatform")
-                                .email("admin@smartcloud.com")
-                                .url("https://www.smartcloud.com"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("https://www.apache.org/licenses/LICENSE-2.0.html")));

@@ -68,13 +68,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      */
     Role checkRoleNameUnique(String roleName);
 
-    /**
-     * 校验角色权限是否唯一
-     * 
-     * @param roleKey 角色权限
-     * @return 角色信息
-     */
-    Role checkRoleKeyUnique(String roleKey);
+
 
     /**
      * 修改角色信息

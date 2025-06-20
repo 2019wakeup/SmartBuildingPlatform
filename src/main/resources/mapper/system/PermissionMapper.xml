@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.smartcloudplatform.mapper.PermissionMapper">
+
+    <resultMap type="Permission" id="PermissionResult">
+        <id     property="permissionId"   column="permissionID"  />
+        <result property="code"           column="code"          />
+        <result property="createBy"       column="create_by"     />
+        <result property="createTime"     column="create_time"   />
+        <result property="updateBy"       column="update_by"     />
+        <result property="updateTime"     column="update_time"   />
+        <result property="remark"         column="remark"        />
+    </resultMap>
+
+    <sql id="selectPermissionVo">
+        select p.permissionID, p.code, p.create_by, p.create_time, p.update_by, p.update_time, p.remark
+        from Permission p
+    </sql>
+
+    <select id="selectPermissionList" parameterType="Permission" resultMap="PermissionResult">
+        <include refid="selectPermissionVo"/>
+        <where>
+            <if test="permissionId != null and permissionId != 0">
+                AND p.permissionID = #{permissionId}
+            </if>
+            <if test="code != null and code != ''">
+                AND p.code like concat('%', #{code}, '%')
+            </if>
+        </where>
+        order by p.permissionID
+    </select>
+
+    <select id="selectPermissionsByRoleId" parameterType="Long" resultMap="PermissionResult">
+        select distinct p.permissionID, p.code, p.create_by, p.create_time, p.update_by, p.update_time, p.remark
+        from Permission p
+        left join RolePermissions rp on p.permissionID = rp.permissionID
+        where rp.roleID = #{roleId}
+        order by p.permissionID
+    </select>
+
+    <select id="selectPermissionAll" resultMap="PermissionResult">
+        <include refid="selectPermissionVo"/>
+        order by p.permissionID
+    </select>
+
+    <select id="selectPermissionById" parameterType="Long" resultMap="PermissionResult">
+        <include refid="selectPermissionVo"/>
+        where p.permissionID = #{permissionId}
+    </select>
+
+    <select id="selectPermissionByCode" parameterType="String" resultMap="PermissionResult">
+        <include refid="selectPermissionVo"/>
+        where p.code = #{code}
+    </select>
+
+    <select id="checkPermissionCodeUnique" parameterType="String" resultMap="PermissionResult">
+        <include refid="selectPermissionVo"/>
+        where p.code = #{code} limit 1
+    </select>
+
+    <insert id="insertPermission" parameterType="Permission" useGeneratedKeys="true" keyProperty="permissionId">
+        insert into Permission(
+        <if test="permissionId != null and permissionId != 0">permissionID,</if>
+        <if test="code != null and code != ''">code,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="permissionId != null and permissionId != 0">#{permissionId},</if>
+        <if test="code != null and code != ''">#{code},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updatePermission" parameterType="Permission">
+        update Permission
+        <set>
+            <if test="code != null and code != ''">code = #{code},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where permissionID = #{permissionId}
+    </update>
+
+    <delete id="deletePermissionById" parameterType="Long">
+        delete from Permission where permissionID = #{permissionId}
+    </delete>
+
+    <delete id="deletePermissionByIds" parameterType="Long">
+        delete from Permission where permissionID in
+        <foreach collection="array" item="permissionId" open="(" separator="," close=")">
+            #{permissionId}
+        </foreach>
+    </delete>
+
+</mapper> 

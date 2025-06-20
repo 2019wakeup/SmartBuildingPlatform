@@ -61,37 +61,25 @@ public class User extends BaseEntity {
     @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号码格式不正确")
     private String phone;
 
-    /** 角色ID */
+    /** 角色ID - 外键关联到Role表 */
+    @Schema(description = "角色ID", example = "1")
     private Long roleId;
 
-    /** 样本ID */
+    /** 样本ID - 外键关联到BreathSample表 */
+    @Schema(description = "样本ID", example = "1")
     private Long sampleId;
 
-    /** 用户状态（0正常 1停用） */
-    private String status;
-
-    /** 删除标志（0代表存在 2代表删除） */
-    private String delFlag;
-
-    /** 最后登录IP */
-    @TableField(exist = false)
-    private String loginIp;
-
-    /** 最后登录时间 */
-    @TableField(exist = false)
-    private String loginDate;
-
-    /** 角色对象 */
+    /** 角色对象 - 非数据库字段 */
     @TableField(exist = false)
     private Role role;
 
-    /** 角色组 */
+    /** 呼吸样本对象 - 非数据库字段 */
     @TableField(exist = false)
-    private Long[] roleIds;
+    private BreathSample breathSample;
 
-    /** 角色列表 */
+    /** 用户角色关系列表 - 非数据库字段 */
     @TableField(exist = false)
-    private List<Role> roles;
+    private List<UserRoles> userRoles;
 
     public User() {
 

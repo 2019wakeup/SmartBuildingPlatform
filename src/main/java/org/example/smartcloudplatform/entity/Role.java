@@ -36,37 +36,25 @@ public class Role extends BaseEntity {
     @Size(min = 0, max = 50, message = "角色名称长度不能超过50个字符")
     private String roleName;
 
-    /** 权限ID */
+    /** 用户ID - 外键关联到User表 */
+    @Schema(description = "用户ID", example = "1")
+    private Long userId;
+
+    /** 权限ID - 外键关联到Permission表 */
     @Schema(description = "权限ID", example = "1")
     private Long permissionId;
 
-    /** 角色权限 */
-    @Schema(description = "角色权限标识", example = "admin")
-    private String roleKey;
-
-    /** 显示顺序 */
-    private Integer roleSort;
-
-    /** 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限） */
-    private String dataScope;
-
-    /** 角色状态（0正常 1停用） */
-    private String status;
-
-    /** 删除标志（0代表存在 2代表删除） */
-    private String delFlag;
-
-    /** 用户是否存在此角色标识 默认不存在 */
+    /** 用户对象 - 非数据库字段 */
     @TableField(exist = false)
-    private boolean flag = false;
+    private User user;
 
-    /** 权限组 */
+    /** 权限对象 - 非数据库字段 */
     @TableField(exist = false)
-    private Long[] permissionIds;
+    private Permission permission;
 
-    /** 权限列表 */
+    /** 角色权限关系列表 - 非数据库字段 */
     @TableField(exist = false)
-    private List<Permission> permissions;
+    private List<RolePermissions> rolePermissions;
 
     public Role() {
 

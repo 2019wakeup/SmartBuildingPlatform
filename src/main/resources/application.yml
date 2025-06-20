@@ -2,11 +2,11 @@ spring:
   application:
     name: SmartCloudPlatform
   # 数据源配置（暂时注释用于测试）
-  # datasource:
-  #   driver-class-name: com.mysql.cj.jdbc.Driver
-  #   url: jdbc:mysql://localhost:3306/cloudplatform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
-  #   username: root
-  #   password: 123456
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloudplatform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123
   # Redis配置（暂时注释用于测试）
   # data:
   #   redis:
@@ -57,8 +57,6 @@ mybatis-plus:
     default-statement-timeout: 25
     # 设置超时时间
     default-fetch-size: 100
-    # 是否开启自动驼峰命名规则映射
-    map-underscore-to-camel-case: true
     # 日志输出
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * 
  * @author SmartCloudPlatform
  */
-@Configuration
+// @Configuration // 暂时注释，等配置数据源后再启用
 public class MybatisPlusConfig {
     
     /**

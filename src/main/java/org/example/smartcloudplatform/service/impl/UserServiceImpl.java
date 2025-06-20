@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.example.smartcloudplatform.entity.User;
 import org.example.smartcloudplatform.mapper.UserMapper;
 import org.example.smartcloudplatform.service.IUserService;
+import org.example.smartcloudplatform.service.IUserRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
+    
+    @Autowired
+    private IUserRolesService userRolesService;
 
     /**
      * 根据条件分页查询用户列表
@@ -208,7 +212,12 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public void insertUserAuth(Long userId, Long[] roleIds) {
-        // 简化实现，实际应该操作用户角色关联表
+        // 先删除原有的用户角色关系
+        userRolesService.deleteUserRolesByUserId(userId);
+        // 重新插入用户角色关系
+        if (roleIds != null && roleIds.length > 0) {
+            userRolesService.batchInsertUserRoles(userId, roleIds);
+        }
     }
 
     /**

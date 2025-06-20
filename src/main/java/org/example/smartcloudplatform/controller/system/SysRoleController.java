@@ -33,15 +33,15 @@ public class SysRoleController {
         Role adminRole = new Role();
         adminRole.setRoleId(1L);
         adminRole.setRoleName("管理员");
-        adminRole.setRoleKey("admin");
-        adminRole.setStatus("0");
+        adminRole.setUserId(1L);
+        adminRole.setPermissionId(1L);
         list.add(adminRole);
         
         Role userRole = new Role();
         userRole.setRoleId(2L);
         userRole.setRoleName("普通用户");
-        userRole.setRoleKey("user");
-        userRole.setStatus("0");
+        userRole.setUserId(2L);
+        userRole.setPermissionId(2L);
         list.add(userRole);
         
         return TableDataInfo.getDataTable(list);
@@ -58,8 +58,8 @@ public class SysRoleController {
         Role role = new Role();
         role.setRoleId(roleId);
         role.setRoleName("管理员");
-        role.setRoleKey("admin");
-        role.setStatus("0");
+        role.setUserId(1L);
+        role.setPermissionId(1L);
         return AjaxResult.success(role);
     }
 
