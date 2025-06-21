@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.smartcloudplatform.mapper.RoleMapper">
 
-    <resultMap type="Role" id="RoleResult">
+    <resultMap type="org.example.smartcloudplatform.entity.Role" id="RoleResult">
         <id     property="roleId"        column="roleID"        />
         <result property="roleName"      column="roleName"      />
         <result property="userId"        column="userID"        />

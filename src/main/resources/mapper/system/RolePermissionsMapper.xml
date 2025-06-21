@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.smartcloudplatform.mapper.RolePermissionsMapper">
 
-    <resultMap type="RolePermissions" id="RolePermissionsResult">
+    <resultMap type="org.example.smartcloudplatform.entity.RolePermissions" id="RolePermissionsResult">
         <result property="roleId"         column="roleID"        />
         <result property="permissionId"   column="permissionID"  />
         <result property="createBy"       column="create_by"     />

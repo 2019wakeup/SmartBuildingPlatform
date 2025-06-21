@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.smartcloudplatform.mapper.BreathSampleMapper">
 
-    <resultMap type="BreathSample" id="BreathSampleResult">
+    <resultMap type="org.example.smartcloudplatform.entity.BreathSample" id="BreathSampleResult">
         <id     property="sampleId"     column="sampleID"      />
         <result property="dataTaken"    column="dataTaken"     />
         <result property="userId"       column="userID"        />
@@ -13,7 +13,6 @@
         <result property="updateBy"     column="update_by"     />
         <result property="updateTime"   column="update_time"   />
         <result property="remark"       column="remark"        />
-        <association property="user"    column="userID" javaType="User" resultMap="org.example.smartcloudplatform.mapper.UserMapper.UserResult" />
     </resultMap>
 
     <sql id="selectBreathSampleVo">
