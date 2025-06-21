@@ -19,7 +19,7 @@ import java.util.List;
  * @author SmartCloudPlatform
  */
 @Tag(name = "用户管理", description = "用户信息的增删改查操作")
-// @RestController // 暂时注释，等配置数据源后再启用
+@RestController
 @RequestMapping("/system/user")
 public class SysUserController {
     @Autowired
