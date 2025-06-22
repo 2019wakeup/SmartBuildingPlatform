@@ -118,6 +118,8 @@ springdoc:
     enabled: true
   # 分组配置
   group-configs:
+    - group: '用户认证'
+      paths-to-match: '/auth/**'
     - group: '系统管理'
       paths-to-match: '/system/**'
     - group: '首页'

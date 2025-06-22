@@ -357,4 +357,25 @@ public class UserServiceImpl implements IUserService {
         }
         return successMsg.toString();
     }
+
+    /**
+     * 用户登录验证
+     * 
+     * @param account 用户账号
+     * @param password 用户密码
+     * @return 用户信息，验证失败返回null
+     */
+    @Override
+    public User loginUser(String account, String password) {
+        if (StrUtil.isBlank(account) || StrUtil.isBlank(password)) {
+            return null;
+        }
+        
+        User user = userMapper.selectUserByAccount(account);
+        if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+            return user;
+        }
+        
+        return null;
+    }
 } 

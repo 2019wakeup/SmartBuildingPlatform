@@ -31,3 +31,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Generated API Docs ###
+generated-docs/
+api-docs.html
+api-docs.json
+openapi.json
+
+### Test Results ###
+Test Results*.xml
+
+### modules in Front end ###
+/SmartCloudPlatform-FrontEnd/node_modules/

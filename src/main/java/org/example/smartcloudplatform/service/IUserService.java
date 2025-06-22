@@ -203,4 +203,13 @@ public interface IUserService {
      * @return 结果
      */
     String importUser(List<User> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 用户登录验证
+     * 
+     * @param account 用户账号
+     * @param password 用户密码
+     * @return 用户信息，验证失败返回null
+     */
+    User loginUser(String account, String password);
 } 
