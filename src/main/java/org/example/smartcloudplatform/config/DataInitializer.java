@@ -37,21 +37,22 @@ public class DataInitializer implements ApplicationRunner {
                 User adminUser = new User();
                 adminUser.setUserName("系统管理员");
                 adminUser.setAccount("admin");
-                adminUser.setPassword("admin123"); // 会在service层加密
+                adminUser.setPassword("123456"); // 会在service层加密
                 adminUser.setEmail("admin@smartcloud.com");
                 adminUser.setPhone("13800138000");
                 adminUser.setCreateBy("system");
                 
                 int result = userService.insertUser(adminUser);
                 if (result > 0) {
-                    System.out.println("默认管理员用户创建成功：账号=admin，密码=admin123");
+                    System.out.println("默认管理员用户创建成功：账号=admin，密码=123456");
                 }
             } else {
-                // 用户已存在，重置密码为admin123
-                System.out.println("管理员用户已存在，重置密码为admin123");
-                int result = userService.resetUserPwd("admin", "admin123");
+                // 用户已存在，重置密码为123456
+                System.out.println("管理员用户已存在，重置密码为123456");
+                // 注意：resetUserPwd方法使用的是userName，不是account
+                int result = userService.resetUserPwd("系统管理员", "123456");
                 if (result > 0) {
-                    System.out.println("管理员密码重置成功：账号=admin，密码=admin123");
+                    System.out.println("管理员密码重置成功：账号=admin，密码=123456");
                 } else {
                     System.out.println("管理员密码重置失败");
                 }

@@ -8,6 +8,7 @@
         <id     property="userId"       column="userID"        />
         <result property="userName"     column="userName"      />
         <result property="account"      column="account"       />
+        <result property="password"     column="password"      />
         <result property="email"        column="email"         />
         <result property="phone"        column="phone"         />
         <result property="roleId"       column="roleID"        />
@@ -20,7 +21,7 @@
     </resultMap>
 
     <sql id="selectUserVo">
-        select u.userID, u.userName, u.account, u.email, u.phone, u.roleID, u.sampleID, u.create_by, u.create_time, u.update_by, u.update_time, u.remark
+        select u.userID, u.userName, u.account, u.password, u.email, u.phone, u.roleID, u.sampleID, u.create_by, u.create_time, u.update_by, u.update_time, u.remark
         from User u
     </sql>
 

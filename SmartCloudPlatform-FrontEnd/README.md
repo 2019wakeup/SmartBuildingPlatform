@@ -1,156 +1,179 @@
-# 智能云平台管理系统 - 前端项目
+# 智能云平台前端项目
 
-基于Vue3 + Vite + Element Plus的前后端分离管理系统前端项目。
+基于 Vue3 + TypeScript + Element Plus 的前后端分离管理系统前端
 
-## 技术栈
+## 🚀 项目特性
 
-- **Vue 3.3.4** - 渐进式JavaScript框架
-- **Vite 4.4.5** - 现代化前端构建工具
-- **Element Plus 2.3.8** - 基于Vue 3的桌面端组件库
-- **TypeScript 5.0.2** - JavaScript的超集
-- **Vue Router 4.2.4** - Vue.js官方路由管理器
-- **Pinia 2.1.6** - Vue的状态管理库
-- **Axios 1.4.0** - HTTP客户端库
+- ✅ **用户认证系统** - 完整的登录/登出功能，JWT token 认证
+- ✅ **现代化UI设计** - 基于 Element Plus 的美观界面
+- ✅ **响应式布局** - 支持移动端和桌面端
+- ✅ **路由守卫** - 自动认证检查和页面保护
+- ✅ **Service Hub** - 统一的功能服务入口
+- ✅ **角色权限管理** - 用户、角色、权限的完整管理
+- ✅ **TypeScript** - 完整的类型支持
 
-## 项目结构
+## 📦 技术栈
 
-```
-src/
-├── api/                 # API接口
-│   ├── request.ts      # axios封装
-│   ├── types.ts        # 类型定义
-│   ├── user.ts         # 用户相关接口
-│   └── role.ts         # 角色相关接口
-├── layout/             # 布局组件
-│   └── index.vue       # 主布局
-├── router/             # 路由配置
-│   └── index.ts        # 路由定义
-├── views/              # 页面组件
-│   ├── user/           # 用户管理
-│   ├── role/           # 角色管理
-│   └── permission/     # 权限管理
-├── App.vue             # 根组件
-├── main.ts             # 入口文件
-└── style.css           # 全局样式
-```
+- **Vue 3** - 渐进式 JavaScript 框架
+- **TypeScript** - JavaScript 的超集
+- **Element Plus** - Vue 3 组件库
+- **Vue Router** - 官方路由管理器
+- **Axios** - HTTP 客户端
+- **Vite** - 现代化构建工具
 
-## 功能特性
+## 🛠️ 开发环境要求
 
-### 用户管理
-- ✅ 用户列表查询
-- ✅ 用户信息的增删改查
-- ✅ 用户状态管理
-- ✅ 密码重置
-- ✅ 用户角色授权
-- ✅ 分页查询
-
-### 角色管理
-- ✅ 角色列表查询
-- ✅ 角色信息的增删改查
-- ✅ 分页查询
-
-### 权限管理
-- ✅ 权限列表查询
-- ✅ 权限信息的增删改查
-- ✅ 分页查询
-
-### UI特性
-- ✅ 响应式设计
-- ✅ 现代化界面
-- ✅ 统一的视觉风格
-- ✅ 良好的用户体验
-
-## 安装和运行
-
-### 环境要求
 - Node.js >= 16.0.0
-- npm >= 7.0.0
+- npm >= 8.0.0
 
-### 安装依赖
+## 📖 快速开始
+
+### 1. 安装依赖
 ```bash
-cd SmartCloudPlatform-FrontEnd
 npm install
 ```
 
-### 开发环境运行
+### 2. 启动开发服务器
+```bash
+npm run dev
+```
+
+### 3. 构建生产版本
+```bash
+npm run build
+```
+
+## 🎯 功能模块
+
+### 1. 用户认证
+- **登录页面** (`/login`) - 用户名密码登录
+- **JWT认证** - 自动token管理和刷新
+- **路由守卫** - 未登录自动跳转到登录页
+
+### 2. 主要页面
+- **首页** (`/home`) - 系统概览和统计信息
+- **Service Hub** (`/service-hub`) - 功能服务中心
+- **用户管理** (`/user`) - 用户信息的增删改查
+- **角色管理** (`/role`) - 角色配置和权限分配
+- **权限管理** (`/permission`) - 系统权限设置
+
+### 3. 布局组件
+- **侧边栏导航** - 层级菜单结构
+- **顶部导航栏** - 用户信息和操作菜单
+- **面包屑导航** - 当前页面位置显示
+
+## 🔧 API 接口
+
+项目与后端 API 的交互遵循以下规范：
+
+### 认证相关
+- `POST /api/auth/login` - 用户登录
+- `POST /api/auth/logout` - 用户登出
+- `GET /api/auth/userinfo` - 获取当前用户信息
+- `POST /api/auth/changePassword` - 修改密码
+
+### 用户管理
+- `GET /api/system/user/list` - 获取用户列表
+- `GET /api/system/user/{id}` - 获取用户详情
+- `POST /api/system/user` - 新增用户
+- `PUT /api/system/user` - 修改用户
+- `DELETE /api/system/user/{ids}` - 删除用户
+
+### 角色管理
+- `GET /api/system/role/list` - 获取角色列表
+- `GET /api/system/role/{id}` - 获取角色详情
+- `POST /api/system/role` - 新增角色
+- `PUT /api/system/role` - 修改角色
+- `DELETE /api/system/role/{ids}` - 删除角色
+
+## 🎨 UI 设计
+
+### 设计原则
+- **简洁明了** - 清晰的视觉层次和信息架构
+- **一致性** - 统一的设计语言和交互模式
+- **响应式** - 适配不同屏幕尺寸
+- **用户友好** - 直观的操作流程和反馈
+
+### 色彩方案
+- **主色调** - 渐变紫色 (#667eea - #764ba2)
+- **辅助色** - 各功能模块的特色渐变
+- **中性色** - 灰色系用于文本和背景
+
+## 🔐 安全特性
+
+- **JWT Token** - 安全的身份认证
+- **路由守卫** - 防止未授权访问
+- **请求拦截** - 自动添加认证头
+- **错误处理** - 统一的错误提示和处理
+
+## 📱 响应式设计
+
+项目采用响应式设计，支持以下设备：
+- **桌面端** - 1200px 以上
+- **平板端** - 768px - 1199px
+- **移动端** - 767px 以下
+
+## 🚀 部署说明
+
+### 开发环境
 ```bash
 npm run dev
 ```
 访问 http://localhost:3000
 
-### 生产环境构建
+### 生产环境
 ```bash
 npm run build
 ```
-
-### 预览构建结果
-```bash
-npm run preview
-```
-
-## API接口
-
-项目严格按照后端API文档进行接口调用，主要包括：
-
-### 用户管理接口
-- `GET /api/system/user/list` - 获取用户列表
-- `POST /api/system/user` - 新增用户
-- `PUT /api/system/user` - 修改用户
-- `DELETE /api/system/user/{userIds}` - 删除用户
-- `PUT /api/system/user/changeStatus` - 修改用户状态
-- `PUT /api/system/user/resetPwd` - 重置密码
-- `GET /api/system/user/authRole/{userId}` - 获取用户角色
-- `PUT /api/system/user/authRole` - 用户授权角色
-
-### 角色管理接口
-- `GET /api/system/role/list` - 获取角色列表
-- `POST /api/system/role` - 新增角色
-- `PUT /api/system/role` - 修改角色
-- `DELETE /api/system/role/{roleIds}` - 删除角色
-- `GET /api/system/role/optionselect` - 获取角色选项
-
-## 配置说明
-
-### Vite配置
-- 自动导入Element Plus组件
-- 配置代理转发后端接口
-- TypeScript支持
-- 路径别名配置
+构建文件输出到 `dist` 目录
 
 ### 代理配置
-开发环境下，所有`/api`请求会被代理到`http://localhost:8080`
+开发环境下，API 请求会自动代理到后端服务器：
+```javascript
+proxy: {
+  '/api': {
+    target: 'http://localhost:8080',
+    changeOrigin: true
+  }
+}
+```
 
-## 开发规范
+## 📝 开发指南
 
-### 代码风格
-- 使用TypeScript进行类型检查
-- 遵循Vue 3 Composition API规范
-- 使用ESLint进行代码检查
+### 项目结构
+```
+src/
+├── api/           # API 接口定义
+├── components/    # 公共组件
+├── layout/        # 布局组件
+├── router/        # 路由配置
+├── utils/         # 工具函数
+├── views/         # 页面组件
+├── App.vue        # 根组件
+└── main.ts        # 入口文件
+```
 
-### 组件规范
-- 使用`<script setup>`语法
-- 合理使用响应式API
-- 组件命名采用PascalCase
+### 代码规范
+- 使用 TypeScript 进行类型检查
+- 遵循 Vue 3 Composition API 规范
+- 使用 ESLint 进行代码检查
+- 统一的命名规范和注释
 
-### API调用规范
-- 统一使用封装的request方法
-- 错误处理统一在拦截器中处理
-- 接口类型定义在types.ts中
+## 🐛 常见问题
 
-## 注意事项
+### 1. 登录后跳转到空白页
+检查路由配置和认证状态
 
-1. 确保后端服务已启动并运行在8080端口
-2. 所有API接口严格按照后端文档规范调用
-3. 开发时注意浏览器控制台的错误信息
-4. 建议使用现代浏览器进行开发和测试
+### 2. API 请求失败
+确认后端服务已启动，检查代理配置
 
-## 浏览器支持
+### 3. 样式显示异常
+检查 Element Plus 组件库是否正确引入
 
-- Chrome >= 87
-- Firefox >= 78
-- Safari >= 14
-- Edge >= 88
+## 📞 技术支持
 
-## 许可证
+如有问题请联系开发团队或查看项目文档。
 
-本项目采用Apache 2.0许可证。
+---
+
+**智能云平台管理系统** - 让管理更简单，让数据更安全

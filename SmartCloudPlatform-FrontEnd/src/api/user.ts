@@ -1,95 +1,56 @@
 import request from './request'
-import type { User, AjaxResult, TableDataInfo, PageQuery } from './types'
+import type { User, ApiResponse, PageQuery } from './types'
 
 // 获取用户列表
-export function getUserList(params: User & PageQuery): Promise<TableDataInfo> {
-  return request({
-    url: '/system/user/list',
-    method: 'get',
-    params
-  })
+export function getUserList(params?: Partial<User & PageQuery>): Promise<ApiResponse> {
+  return request.get('/system/user/list', { params })
 }
 
 // 获取用户详情
-export function getUserInfo(userId?: number): Promise<AjaxResult> {
+export function getUserInfo(userId?: number): Promise<ApiResponse> {
   if (userId) {
-    return request({
-      url: `/system/user/${userId}`,
-      method: 'get'
-    })
+    return request.get(`/system/user/${userId}`)
   } else {
-    return request({
-      url: '/system/user/',
-      method: 'get'
-    })
+    return request.get('/system/user/')
   }
 }
 
 // 新增用户
-export function addUser(data: User): Promise<AjaxResult> {
-  return request({
-    url: '/system/user',
-    method: 'post',
-    data
-  })
+export function addUser(data: User): Promise<ApiResponse> {
+  return request.post('/system/user', data)
 }
 
 // 修改用户
-export function updateUser(data: User): Promise<AjaxResult> {
-  return request({
-    url: '/system/user',
-    method: 'put',
-    data
-  })
+export function updateUser(data: User): Promise<ApiResponse> {
+  return request.put('/system/user', data)
 }
 
 // 删除用户
-export function deleteUser(userIds: number[]): Promise<AjaxResult> {
-  return request({
-    url: `/system/user/${userIds.join(',')}`,
-    method: 'delete'
-  })
+export function deleteUser(userIds: number[]): Promise<ApiResponse> {
+  return request.delete(`/system/user/${userIds.join(',')}`)
 }
 
 // 修改用户状态
-export function changeUserStatus(data: User): Promise<AjaxResult> {
-  return request({
-    url: '/system/user/changeStatus',
-    method: 'put',
-    data
-  })
+export function changeUserStatus(data: User): Promise<ApiResponse> {
+  return request.put('/system/user/changeStatus', data)
 }
 
 // 重置密码
-export function resetUserPwd(data: User): Promise<AjaxResult> {
-  return request({
-    url: '/system/user/resetPwd',
-    method: 'put',
-    data
-  })
+export function resetUserPwd(data: User): Promise<ApiResponse> {
+  return request.put('/system/user/resetPwd', data)
 }
 
 // 获取用户角色
-export function getUserRole(userId: number): Promise<AjaxResult> {
-  return request({
-    url: `/system/user/authRole/${userId}`,
-    method: 'get'
-  })
+export function getUserRole(userId: number): Promise<ApiResponse> {
+  return request.get(`/system/user/authRole/${userId}`)
 }
 
 // 用户授权角色
-export function authUserRole(userId: number, roleIds: number[]): Promise<AjaxResult> {
-  return request({
-    url: `/system/user/authRole?userId=${userId}`,
-    method: 'put',
-    data: roleIds
-  })
+export function authUserRole(userId: number, roleIds: number[]): Promise<ApiResponse> {
+  return request.put(`/system/user/authRole?userId=${userId}`, roleIds)
 }
 
 // 获取部门树
-export function getDeptTree(): Promise<AjaxResult> {
-  return request({
-    url: '/system/user/deptTree',
-    method: 'get'
-  })
+export function getDeptTree(): Promise<ApiResponse> {
+  return request.get('/system/user/deptTree')
 } 

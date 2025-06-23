@@ -66,16 +66,18 @@ export interface BreathSample extends BaseEntity {
   user?: User
 }
 
-// API响应类型
+// API响应类型 - 匹配后端AjaxResult结构
 export interface AjaxResult {
-  type?: 'SUCCESS' | 'WARN' | 'ERROR'
-  error?: boolean
-  success?: boolean
-  warn?: boolean
-  empty?: boolean
-  msg?: string
+  code: number
+  msg: string
   data?: any
-  [key: string]: any
+}
+
+// 前端统一响应类型
+export interface ApiResponse {
+  success: boolean
+  msg: string
+  data?: any
 }
 
 // 分页数据类型

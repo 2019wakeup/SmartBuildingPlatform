@@ -48,6 +48,10 @@
         <el-icon><Delete /></el-icon>
         删除
       </el-button>
+      <el-button type="warning" @click="testAPI">
+        <el-icon><Tools /></el-icon>
+        测试API
+      </el-button>
     </div>
 
     <!-- 角色列表表格 -->
@@ -170,10 +174,44 @@ const getList = async () => {
   loading.value = true
   try {
     const response = await getRoleList(queryParams)
-    roleList.value = response.rows || []
-    total.value = response.total || 0
-  } catch (error) {
+    console.log('角色列表响应:', response)
+    
+    if (response.success && response.data) {
+      // 处理后端返回的分页数据
+      if (response.data.rows) {
+        // 如果是分页数据格式，映射蛇形命名到驼峰命名
+        roleList.value = response.data.rows.map((role: any) => ({
+          roleId: role.role_id || role.roleID || role.roleId,
+          roleName: role.role_name || role.roleName,
+          createTime: role.create_time || role.createTime,
+          updateTime: role.update_time || role.updateTime,
+          remark: role.remark
+        }))
+        total.value = response.data.total || 0
+      } else if (Array.isArray(response.data)) {
+        // 如果直接返回数组
+        roleList.value = response.data.map((role: any) => ({
+          roleId: role.role_id || role.roleID || role.roleId,
+          roleName: role.role_name || role.roleName,
+          createTime: role.create_time || role.createTime,
+          updateTime: role.update_time || role.updateTime,
+          remark: role.remark
+        }))
+        total.value = response.data.length
+      } else {
+        roleList.value = []
+        total.value = 0
+      }
+    } else {
+      roleList.value = []
+      total.value = 0
+      ElMessage.warning(response.msg || '获取角色列表失败')
+    }
+  } catch (error: any) {
     console.error('获取角色列表失败:', error)
+    ElMessage.error(error.message || '获取角色列表失败')
+    roleList.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }
@@ -260,18 +298,26 @@ const submitForm = async () => {
   await roleFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       try {
+        console.log('提交角色数据:', roleForm.value)
+        
         if (roleForm.value.roleId) {
-          await updateRole(roleForm.value)
+          const response = await updateRole(roleForm.value)
+          console.log('修改角色响应:', response)
           ElMessage.success('修改成功')
         } else {
-          await addRole(roleForm.value)
+          const response = await addRole(roleForm.value)
+          console.log('添加角色响应:', response)
           ElMessage.success('添加成功')
         }
         dialogVisible.value = false
         getList()
-      } catch (error) {
-        ElMessage.error('操作失败')
+      } catch (error: any) {
+        console.error('操作失败:', error)
+        ElMessage.error(error.message || '操作失败')
       }
+    } else {
+      console.log('表单验证失败')
+      ElMessage.error('请检查表单填写是否正确')
     }
   })
 }
@@ -292,6 +338,29 @@ const resetForm = () => {
 onMounted(() => {
   getList()
 })
+
+// 测试API连接
+const testAPI = async () => {
+  console.log('开始测试角色API...')
+  
+  try {
+    // 测试角色列表API
+    console.log('测试角色列表API...')
+    const roleResponse = await getRoleList({ pageNum: 1, pageSize: 10 })
+    console.log('角色列表API响应:', roleResponse)
+    
+    // 测试角色选项API
+    console.log('测试角色选项API...')
+    const { getRoleOptionSelect } = await import('@/api/role')
+    const optionResponse = await getRoleOptionSelect()
+    console.log('角色选项API响应:', optionResponse)
+    
+    ElMessage.success('角色API测试完成，请查看控制台日志')
+  } catch (error: any) {
+    console.error('角色API测试失败:', error)
+    ElMessage.error(`角色API测试失败: ${error.message}`)
+  }
+}
 </script>
 
 <style scoped>

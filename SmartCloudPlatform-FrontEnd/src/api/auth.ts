@@ -1,5 +1,5 @@
 import request from './request'
-import type { AjaxResult } from './types'
+import type { ApiResponse } from './types'
 
 // 登录请求参数类型
 export interface LoginRequest {
@@ -27,35 +27,21 @@ export interface ChangePasswordRequest {
 }
 
 // 用户登录
-export function login(data: LoginRequest): Promise<AjaxResult> {
-  return request({
-    url: '/auth/login',
-    method: 'post',
-    data
-  })
+export function login(data: LoginRequest): Promise<ApiResponse> {
+  return request.post('/auth/login', data)
 }
 
 // 用户登出
-export function logout(): Promise<AjaxResult> {
-  return request({
-    url: '/auth/logout',
-    method: 'post'
-  })
+export function logout(): Promise<ApiResponse> {
+  return request.post('/auth/logout')
 }
 
 // 获取当前用户信息
-export function getUserInfo(): Promise<AjaxResult> {
-  return request({
-    url: '/auth/userinfo',
-    method: 'get'
-  })
+export function getUserInfo(): Promise<ApiResponse> {
+  return request.get('/auth/userinfo')
 }
 
 // 修改密码
-export function changePassword(data: ChangePasswordRequest): Promise<AjaxResult> {
-  return request({
-    url: '/auth/changePassword',
-    method: 'post',
-    data
-  })
+export function changePassword(data: ChangePasswordRequest): Promise<ApiResponse> {
+  return request.post('/auth/changePassword', data)
 } 

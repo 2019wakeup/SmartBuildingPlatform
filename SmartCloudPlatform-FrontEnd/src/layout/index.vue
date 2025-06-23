@@ -11,7 +11,7 @@
         :router="true"
         unique-opened
       >
-        <el-menu-item index="/" class="menu-item" :class="{ active: activeMenu === '/' }">
+        <el-menu-item index="/home" class="menu-item" :class="{ active: activeMenu === '/home' }">
           <el-icon><HomeFilled /></el-icon>
           <span>首页</span>
         </el-menu-item>
@@ -202,7 +202,7 @@ const activeMenu = computed(() => {
 
 const currentPageTitle = computed(() => {
   const routeMap: { [key: string]: string } = {
-    '/': '首页',
+    '/home': '首页',
     '/service-hub': 'Service Hub',
     '/user': '用户管理',
     '/role': '角色管理',

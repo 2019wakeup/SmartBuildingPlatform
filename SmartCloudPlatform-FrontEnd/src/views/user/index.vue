@@ -28,6 +28,10 @@
             <el-icon><Search /></el-icon>
             SEARCH
           </el-button>
+          <el-button type="warning" @click="testAPI">
+            <el-icon><Tools /></el-icon>
+            测试API
+          </el-button>
         </div>
       </div>
     </div>
@@ -69,10 +73,10 @@
         <el-table-column prop="no" label="NO." width="80" align="center" />
         <el-table-column prop="userId" label="ID" width="150" align="center" />
         <el-table-column prop="userName" label="Name" width="120" align="center" />
-        <el-table-column prop="gender" label="Gender" width="80" align="center" />
-        <el-table-column prop="age" label="Age" width="80" align="center" />
-        <el-table-column prop="birth" label="Birth" width="120" align="center" />
-        <el-table-column prop="city" label="City" width="100" align="center" />
+        <el-table-column prop="account" label="Account" width="120" align="center" />
+        <el-table-column prop="email" label="Email" width="180" align="center" />
+        <el-table-column prop="phone" label="Phone" width="120" align="center" />
+        <el-table-column prop="roleId" label="Role ID" width="80" align="center" />
         <el-table-column label="More" align="center">
           <template #default="scope">
             <el-button type="primary" text @click="handleMore(scope.row)">More</el-button>
@@ -119,30 +123,16 @@
         <el-form-item label="手机号码" prop="phone">
           <el-input v-model="userForm.phone" placeholder="请输入手机号码" />
         </el-form-item>
-        <el-form-item label="性别">
-          <el-radio-group v-model="userForm.gender">
-            <el-radio label="Male">男</el-radio>
-            <el-radio label="Female">女</el-radio>
-          </el-radio-group>
+        <el-form-item label="默认密码" v-if="!userForm.userId">
+          <el-input v-model="userForm.password" placeholder="新用户默认密码" readonly />
         </el-form-item>
-        <el-form-item label="年龄">
-          <el-input-number v-model="userForm.age" :min="1" :max="120" />
-        </el-form-item>
-        <el-form-item label="出生日期">
-          <el-date-picker
-            v-model="userForm.birth"
-            type="date"
-            placeholder="选择日期"
-            format="YYYY-MM-DD"
-            value-format="YYYY-MM-DD"
-          />
-        </el-form-item>
-        <el-form-item label="城市">
-          <el-input v-model="userForm.city" placeholder="请输入城市" />
+        <el-form-item label="角色ID">
+          <el-input-number v-model="userForm.roleId" :min="1" :max="10" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
+          <el-button @click="debugFormData" type="info" plain>调试数据</el-button>
           <el-button @click="dialogVisible = false">取消</el-button>
           <el-button type="primary" @click="submitForm">确定</el-button>
         </span>
@@ -152,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getUserList, addUser, updateUser, deleteUser } from '@/api/user'
 import type { User } from '@/api/types'
@@ -185,21 +175,21 @@ const userForm = ref<any>({
   userId: undefined,
   userName: '',
   account: '',
+  password: '123456', // 新用户默认密码
   email: '',
   phone: '',
-  gender: 'Male',
-  age: 20,
-  birth: '2004-01-01',
-  city: 'Wuhan'
+  roleId: 2 // 默认普通用户角色
 })
 
 // 表单验证规则
 const userRules = {
   userName: [
-    { required: true, message: '用户名称不能为空', trigger: 'blur' }
+    { required: true, message: '用户名称不能为空', trigger: 'blur' },
+    { min: 2, max: 50, message: '用户名称长度在 2 到 50 个字符', trigger: 'blur' }
   ],
   account: [
-    { required: true, message: '用户账号不能为空', trigger: 'blur' }
+    { required: true, message: '用户账号不能为空', trigger: 'blur' },
+    { min: 3, max: 50, message: '用户账号长度在 3 到 50 个字符', trigger: 'blur' }
   ],
   email: [
     { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
@@ -221,20 +211,48 @@ const getList = async () => {
   loading.value = true
   try {
     const response = await getUserList(queryParams)
-    userList.value = [
-      {
-        no: '001',
-        userId: '202231123002001',
-        userName: 'Zhang San',
-        gender: 'Male',
-        age: 20,
-        birth: '2004.01.01',
-        city: 'Wuhan'
+    console.log('用户列表响应:', response)
+    
+    if (response.success && response.data) {
+      // 处理后端返回的分页数据
+      if (response.data.rows) {
+        // 如果是分页数据格式
+        userList.value = response.data.rows.map((user: any, index: number) => ({
+          no: String(index + 1).padStart(3, '0'),
+          userId: user.user_id || user.userID || user.userId,
+          userName: user.user_name || user.userName,
+          account: user.account,
+          email: user.email,
+          phone: user.phone,
+          roleId: user.role_id || user.roleID || user.roleId
+        }))
+        total.value = response.data.total || 0
+      } else if (Array.isArray(response.data)) {
+        // 如果直接返回数组
+        userList.value = response.data.map((user: any, index: number) => ({
+          no: String(index + 1).padStart(3, '0'),
+          userId: user.user_id || user.userID || user.userId,
+          userName: user.user_name || user.userName,
+          account: user.account,
+          email: user.email,
+          phone: user.phone,
+          roleId: user.role_id || user.roleID || user.roleId
+        }))
+        total.value = response.data.length
+      } else {
+        userList.value = []
+        total.value = 0
       }
-    ]
-    total.value = 1
-  } catch (error) {
+    } else {
+      userList.value = []
+      total.value = 0
+      ElMessage.warning(response.msg || '获取用户列表失败')
+    }
+  } catch (error: any) {
     console.error('获取用户列表失败:', error)
+    ElMessage.error(error.message || '获取用户列表失败')
+    userList.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }
@@ -265,7 +283,18 @@ const handleEdit = () => {
     ElMessage.warning('请先选择要编辑的用户')
     return
   }
-  userForm.value = { ...selectedUser.value }
+  
+  // 将后端的蛇形命名数据转换为前端表单的驼峰命名
+  userForm.value = {
+    userId: selectedUser.value.userId,
+    userName: selectedUser.value.userName,
+    account: selectedUser.value.account,
+    password: '123456', // 编辑时不显示原密码
+    email: selectedUser.value.email || '',
+    phone: selectedUser.value.phone || '',
+    roleId: selectedUser.value.roleId || 2
+  }
+  
   dialogVisible.value = true
 }
 
@@ -323,18 +352,58 @@ const submitForm = async () => {
   await userFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       try {
-        if (userForm.value.userId) {
-          await updateUser(userForm.value)
+        // 确保所有必需字段都有值
+        const formData = {
+          ...userForm.value,
+          userName: userForm.value.userName?.trim() || '',
+          account: userForm.value.account?.trim() || '',
+          email: userForm.value.email?.trim() || '',
+          phone: userForm.value.phone?.trim() || '',
+          password: userForm.value.password || '123456',
+          roleId: userForm.value.roleId || 2
+        }
+        
+        // 转换为蛇形命名法以匹配后端配置
+        const submitData = {
+          user_id: formData.userId,
+          user_name: formData.userName,
+          account: formData.account,
+          password: formData.password,
+          email: formData.email,
+          phone: formData.phone,
+          role_id: formData.roleId
+        }
+        
+        console.log('提交用户数据 (蛇形命名):', submitData)
+        
+        // 验证必需字段
+        if (!submitData.user_name) {
+          ElMessage.error('用户名称不能为空')
+          return
+        }
+        if (!submitData.account) {
+          ElMessage.error('用户账号不能为空')
+          return
+        }
+        
+        if (submitData.user_id) {
+          const response = await updateUser(submitData)
+          console.log('修改用户响应:', response)
           ElMessage.success('修改成功')
         } else {
-          await addUser(userForm.value)
+          const response = await addUser(submitData)
+          console.log('添加用户响应:', response)
           ElMessage.success('添加成功')
         }
         dialogVisible.value = false
         getList()
-      } catch (error) {
-        ElMessage.error('操作失败')
+      } catch (error: any) {
+        console.error('操作失败:', error)
+        ElMessage.error(error.message || '操作失败')
       }
+    } else {
+      console.log('表单验证失败')
+      ElMessage.error('请检查表单填写是否正确')
     }
   })
 }
@@ -345,22 +414,52 @@ const resetForm = () => {
     userId: undefined,
     userName: '',
     account: '',
+    password: '123456',
     email: '',
     phone: '',
-    gender: 'Male',
-    age: 20,
-    birth: '2004-01-01',
-    city: 'Wuhan'
+    roleId: 2
   }
-  if (userFormRef.value) {
-    userFormRef.value.resetFields()
-  }
+  
+  // 等待下一个tick再重置表单验证
+  nextTick(() => {
+    if (userFormRef.value) {
+      userFormRef.value.clearValidate()
+    }
+  })
 }
 
 // 初始化
 onMounted(() => {
   getList()
 })
+
+// 测试API连接
+const testAPI = async () => {
+  console.log('开始测试API...')
+  
+  try {
+    // 测试用户列表API
+    console.log('测试用户列表API...')
+    const userResponse = await getUserList({ pageNum: 1, pageSize: 10 })
+    console.log('用户列表API响应:', userResponse)
+    
+    // 测试角色列表API
+    console.log('测试角色列表API...')
+    const { getRoleList } = await import('@/api/role')
+    const roleResponse = await getRoleList({ pageNum: 1, pageSize: 10 })
+    console.log('角色列表API响应:', roleResponse)
+    
+    ElMessage.success('API测试完成，请查看控制台日志')
+  } catch (error: any) {
+    console.error('API测试失败:', error)
+    ElMessage.error(`API测试失败: ${error.message}`)
+  }
+}
+
+// 添加调试按钮
+const debugFormData = () => {
+  console.log('调试表单数据:', userForm.value)
+}
 </script>
 
 <style scoped>
