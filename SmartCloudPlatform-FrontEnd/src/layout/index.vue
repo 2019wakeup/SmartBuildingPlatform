@@ -208,7 +208,8 @@ const currentPageTitle = computed(() => {
     '/service-hub': 'Service Hub',
     '/user': '用户管理',
     '/role': '角色管理',
-    '/permission': '权限管理'
+    '/permission': '权限管理',
+    '/profile': '个人中心'
   }
   return map[route.path] || '系统管理'
 })
@@ -216,7 +217,7 @@ const currentPageTitle = computed(() => {
 // 用户下拉菜单
 const handleUserCommand = (command: string) => {
   if (command === 'profile') {
-    ElMessage.info('个人中心功能开发中')
+    router.push('/profile')
   } else if (command === 'changePassword') {
     changePasswordVisible.value = true
   } else if (command === 'logout') {

@@ -81,6 +81,8 @@ public class User extends BaseEntity {
     @TableField(exist = false)
     private List<UserRoles> userRoles;
 
+    private String avatar; // 头像URL
+
     public User() {
 
     }

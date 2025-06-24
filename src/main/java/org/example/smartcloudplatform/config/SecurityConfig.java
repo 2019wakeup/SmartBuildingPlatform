@@ -35,6 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login", "/auth/logout").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**", "/doc.html", "/favicon.ico").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         // 其他请求需要认证
                         .anyRequest().authenticated()
                 )

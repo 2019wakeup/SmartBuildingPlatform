@@ -65,6 +65,15 @@ const routes = [
           title: '权限管理',
           icon: 'Key'
         }
+      },
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import('@/views/profile/index.vue'),
+        meta: {
+          title: '个人中心',
+          hidden: true
+        }
       }
     ]
   },

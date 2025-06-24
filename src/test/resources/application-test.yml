@@ -4,9 +4,9 @@ spring:
   # 使用内存数据库进行测试
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:mysql://localhost:3307/cloudplatform?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: sa
-    password: 
+    password: 123456
     # 数据库初始化配置
     initialization-mode: always
     schema: classpath:schema.sql

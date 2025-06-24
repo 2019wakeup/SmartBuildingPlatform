@@ -6,6 +6,21 @@ export function getUserList(params?: Partial<User & PageQuery>): Promise<ApiResp
   return request.get('/system/user/list', { params })
 }
 
+// 获取用户个人信息
+export function getUserProfile(): Promise<ApiResponse> {
+  return request.get('/system/user/profile')
+}
+
+// 修改用户个人信息
+export function updateUserProfile(data: User): Promise<ApiResponse> {
+  return request.put('/system/user/profile', data)
+}
+
+// 用户头像上传
+export function uploadAvatar(data: FormData): Promise<ApiResponse> {
+  return request.post('/system/user/avatar', data)
+}
+
 // 获取用户详情
 export function getUserInfo(userId?: number): Promise<ApiResponse> {
   if (userId) {
@@ -53,4 +68,4 @@ export function authUserRole(userId: number, roleIds: number[]): Promise<ApiResp
 // 获取部门树
 export function getDeptTree(): Promise<ApiResponse> {
   return request.get('/system/user/deptTree')
-} 
+}

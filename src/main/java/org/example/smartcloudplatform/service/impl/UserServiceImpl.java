@@ -245,13 +245,16 @@ public class UserServiceImpl implements IUserService {
     /**
      * 修改用户头像
      * 
-     * @param userName 用户名
+     * @param userId 用户ID
      * @param avatar 头像地址
      * @return 结果
      */
     @Override
-    public boolean updateUserAvatar(String userName, String avatar) {
-        return userMapper.updateUserAvatar(userName, avatar) > 0;
+    public boolean updateUserAvatar(Long userId, String avatar) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setAvatar(avatar);
+        return userMapper.updateUser(user) > 0;
     }
 
     /**
