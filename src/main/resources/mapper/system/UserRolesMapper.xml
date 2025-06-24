@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.smartcloudplatform.mapper.UserRolesMapper">
+
+    <resultMap type="org.example.smartcloudplatform.entity.UserRoles" id="UserRolesResult">
+        <result property="userId"       column="userID"        />
+        <result property="roleId"       column="roleID"        />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+        <association property="user"    column="userID" javaType="User" resultMap="org.example.smartcloudplatform.mapper.UserMapper.UserResult" />
+        <association property="role"    column="roleID" javaType="Role" resultMap="org.example.smartcloudplatform.mapper.RoleMapper.RoleResult" />
+    </resultMap>
+
+    <sql id="selectUserRolesVo">
+        select ur.userID, ur.roleID, ur.create_by, ur.create_time, ur.update_by, ur.update_time, ur.remark
+        from UserRoles ur
+    </sql>
+
+    <select id="selectUserRolesByUserId" parameterType="Long" resultMap="UserRolesResult">
+        <include refid="selectUserRolesVo"/>
+        where ur.userID = #{userId}
+    </select>
+
+    <select id="selectUserRolesByRoleId" parameterType="Long" resultMap="UserRolesResult">
+        <include refid="selectUserRolesVo"/>
+        where ur.roleID = #{roleId}
+    </select>
+
+    <insert id="insertUserRoles" parameterType="UserRoles">
+        insert into UserRoles(
+            userID, roleID,
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            create_time
+        )values(
+            #{userId}, #{roleId},
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            sysdate()
+        )
+    </insert>
+
+    <insert id="batchInsertUserRoles" parameterType="java.util.Map">
+        insert into UserRoles(userID, roleID, create_time) values
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{userId}, #{roleId}, sysdate())
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserRoles">
+        delete from UserRoles where userID = #{userId} and roleID = #{roleId}
+    </delete>
+
+    <delete id="deleteUserRolesByUserId" parameterType="Long">
+        delete from UserRoles where userID = #{userId}
+    </delete>
+
+    <delete id="deleteUserRolesByRoleId" parameterType="Long">
+        delete from UserRoles where roleID = #{roleId}
+    </delete>
+
+    <delete id="deleteUserRolesByUserIds" parameterType="Long">
+        delete from UserRoles where userID in
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+</mapper> 

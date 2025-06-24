@@ -1,0 +1,126 @@
+spring:
+  application:
+    name: SmartCloudPlatform
+  # 数据源配置（暂时注释用于测试）
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cloudplatform?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123
+  # Redis配置（暂时注释用于测试）
+  # data:
+  #   redis:
+  #     host: localhost
+  #     port: 6379
+  #     password: 
+  #     database: 0
+  #     timeout: 10s
+  #     lettuce:
+  #       pool:
+  #         max-active: 200
+  #         max-wait: -1ms
+  #         max-idle: 10
+  #         min-idle: 0
+  # JSON配置
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    property-naming-strategy: SNAKE_CASE
+
+# MyBatis Plus配置
+mybatis-plus:
+  # 搜索指定包别名
+  type-aliases-package: org.example.smartcloudplatform.entity
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+  configuration:
+    # 开启驼峰命名
+    map-underscore-to-camel-case: true
+    # 缓存数量
+    cache-enabled: false
+    # 懒加载
+    lazy-loading-enabled: true
+    # 多结果集
+    multiple-result-sets-enabled: true
+    # 使用列标签替代列名
+    use-column-label: true
+    # 允许JDBC 支持自动生成主键
+    use-generated-keys: true
+    # 默认执行器
+    default-executor-type: reuse
+    # 指定 MyBatis 应如何自动映射列到字段或属性
+    auto-mapping-behavior: partial
+    # 指定发现自动映射目标未知列（或者未知属性类型）的行为
+    auto-mapping-unknown-column-behavior: warning
+    # 配置默认的执行器
+    default-statement-timeout: 25
+    # 设置超时时间
+    default-fetch-size: 100
+    # 日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    # 数据库相关配置
+    db-config:
+      # 主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 系统配置
+system:
+  # JWT配置
+  jwt:
+    # 密钥
+    secret: abcdefghijklmnopqrstuvwxyz
+    # token有效时长（分钟）
+    expire: 720
+    # header名称
+    header: Authorization
+  # 分页配置
+  page:
+    # 分页合理化参数，默认false禁用
+    reasonable: true
+    # 支持通过Mapper接口参数来传递分页参数
+    supportMethodsArguments: true
+    # 单页分页条数限制
+    pageSizeZero: true
+
+# 服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# 日志配置
+logging:
+  level:
+    org:
+      example:
+        smartcloudplatform: debug
+    org.springframework.security: debug
+
+# Swagger配置
+springdoc:
+  swagger-ui:
+    # 自定义swagger-ui路径
+    path: /swagger-ui.html
+    # 启用swagger-ui
+    enabled: true
+    # 持久化认证数据
+    persistAuthorization: true
+    # 显示请求持续时间
+    displayRequestDuration: true
+  api-docs:
+    # 自定义api-docs路径
+    path: /v3/api-docs
+    # 启用api-docs
+    enabled: true
+  # 分组配置
+  group-configs:
+    - group: '用户认证'
+      paths-to-match: '/auth/**'
+    - group: '系统管理'
+      paths-to-match: '/system/**'
+    - group: '首页'
+      paths-to-match: '/' 

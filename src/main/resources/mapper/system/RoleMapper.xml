@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.smartcloudplatform.mapper.RoleMapper">
+
+    <resultMap type="org.example.smartcloudplatform.entity.Role" id="RoleResult">
+        <id     property="roleId"        column="roleID"        />
+        <result property="roleName"      column="roleName"      />
+        <result property="userId"        column="userID"        />
+        <result property="permissionId"  column="permissionID"  />
+        <result property="createBy"      column="create_by"     />
+        <result property="createTime"    column="create_time"   />
+        <result property="updateBy"      column="update_by"     />
+        <result property="updateTime"    column="update_time"   />
+        <result property="remark"        column="remark"        />
+        <association property="user"       column="userID" javaType="User" resultMap="org.example.smartcloudplatform.mapper.UserMapper.UserResult" />
+        <association property="permission" column="permissionID" javaType="Permission" resultMap="org.example.smartcloudplatform.mapper.PermissionMapper.PermissionResult" />
+    </resultMap>
+
+    <sql id="selectRoleVo">
+        select r.roleID, r.roleName, r.userID, r.permissionID, r.create_by, r.create_time, r.update_by, r.update_time, r.remark
+        from Role r
+    </sql>
+
+    <select id="selectRoleList" parameterType="Role" resultMap="RoleResult">
+        <include refid="selectRoleVo"/>
+        <where>
+            <if test="roleId != null and roleId != 0">
+                AND r.roleID = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                AND r.roleName like concat('%', #{roleName}, '%')
+            </if>
+            <if test="userId != null and userId != 0">
+                AND r.userID = #{userId}
+            </if>
+        </where>
+        order by r.roleID
+    </select>
+
+    <select id="selectRolePermissionByUserId" parameterType="Long" resultMap="RoleResult">
+        select distinct r.roleID, r.roleName, r.userID, r.permissionID, r.create_by, r.create_time, r.update_by, r.update_time, r.remark
+        from Role r
+        left join UserRoles ur on r.roleID = ur.roleID
+        where ur.userID = #{userId}
+        order by r.roleID
+    </select>
+
+    <select id="selectRoleAll" resultMap="RoleResult">
+        <include refid="selectRoleVo"/>
+        order by r.roleID
+    </select>
+
+    <select id="selectRoleListByUserId" parameterType="Long" resultType="Long">
+        select r.roleID
+        from Role r
+        left join UserRoles ur on r.roleID = ur.roleID
+        where ur.userID = #{userId}
+    </select>
+
+    <select id="selectRoleById" parameterType="Long" resultMap="RoleResult">
+        <include refid="selectRoleVo"/>
+        where r.roleID = #{roleId}
+    </select>
+
+    <select id="selectRolesByUserName" parameterType="String" resultMap="RoleResult">
+        select distinct r.roleID, r.roleName, r.userID, r.permissionID, r.create_by, r.create_time, r.update_by, r.update_time, r.remark
+        from Role r
+        left join UserRoles ur on r.roleID = ur.roleID
+        left join User u on u.userID = ur.userID
+        where u.userName = #{userName}
+        order by r.roleID
+    </select>
+
+    <select id="checkRoleNameUnique" parameterType="String" resultMap="RoleResult">
+        <include refid="selectRoleVo"/>
+        where r.roleName = #{roleName} limit 1
+    </select>
+
+    <insert id="insertRole" parameterType="Role" useGeneratedKeys="true" keyProperty="roleId">
+        insert into Role(
+        <if test="roleId != null and roleId != 0">roleID,</if>
+        <if test="roleName != null and roleName != ''">roleName,</if>
+        <if test="userId != null and userId != 0">userID,</if>
+        <if test="permissionId != null and permissionId != 0">permissionID,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="roleId != null and roleId != 0">#{roleId},</if>
+        <if test="roleName != null and roleName != ''">#{roleName},</if>
+        <if test="userId != null and userId != 0">#{userId},</if>
+        <if test="permissionId != null and permissionId != 0">#{permissionId},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateRole" parameterType="Role">
+        update Role
+        <set>
+            <if test="roleName != null and roleName != ''">roleName = #{roleName},</if>
+            <if test="userId != null and userId != 0">userID = #{userId},</if>
+            <if test="permissionId != null and permissionId != 0">permissionID = #{permissionId},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where roleID = #{roleId}
+    </update>
+
+    <delete id="deleteRoleById" parameterType="Long">
+        delete from Role where roleID = #{roleId}
+    </delete>
+
+    <delete id="deleteRoleByIds" parameterType="Long">
+        delete from Role where roleID in
+        <foreach collection="array" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+</mapper> 

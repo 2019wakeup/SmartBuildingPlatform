@@ -1,0 +1,111 @@
+spring:
+  application:
+    name: SmartCloudPlatform-Test
+  # 使用内存数据库进行测试
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+    # 数据库初始化配置
+    initialization-mode: always
+    schema: classpath:schema.sql
+    data: classpath:data.sql
+  # H2数据库配置
+  h2:
+    console:
+      enabled: true
+  # 数据库初始化配置
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+  # JSON配置
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+    property-naming-strategy: SNAKE_CASE
+
+# MyBatis Plus配置
+mybatis-plus:
+  # 搜索指定包别名
+  type-aliases-package: org.example.smartcloudplatform.entity
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+  # 加载全局的配置文件
+  configuration:
+    # 开启驼峰命名
+    map-underscore-to-camel-case: true
+    # 缓存数量
+    cache-enabled: false
+    # 懒加载
+    lazy-loading-enabled: true
+    # 多结果集
+    multiple-result-sets-enabled: true
+    # 使用列标签替代列名
+    use-column-label: true
+    # 允许JDBC 支持自动生成主键
+    use-generated-keys: true
+    # 默认执行器
+    default-executor-type: reuse
+    # 指定 MyBatis 应如何自动映射列到字段或属性
+    auto-mapping-behavior: partial
+    # 指定发现自动映射目标未知列（或者未知属性类型）的行为
+    auto-mapping-unknown-column-behavior: warning
+    # 配置默认的执行器
+    default-statement-timeout: 25
+    # 设置超时时间
+    default-fetch-size: 100
+    # 测试环境不输出SQL日志
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    # 数据库相关配置
+    db-config:
+      # 主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 系统配置
+system:
+  # JWT配置
+  jwt:
+    # 密钥
+    secret: test_secret_key_for_testing
+    # token有效时长（分钟）
+    expire: 60
+    # header名称
+    header: Authorization
+  # 分页配置
+  page:
+    # 分页合理化参数，默认false禁用
+    reasonable: true
+    # 支持通过Mapper接口参数来传递分页参数
+    supportMethodsArguments: true
+    # 单页分页条数限制
+    pageSizeZero: true
+
+# 服务器配置
+server:
+  port: 8081
+
+# 日志配置
+logging:
+  level:
+    org:
+      example:
+        smartcloudplatform: info
+    # 测试环境关闭SQL日志
+    com.baomidou.mybatisplus: warn
+    # 关闭Spring Security调试日志
+    org.springframework.security: warn
+    # 设置根日志级别
+    root: warn
+
+# Swagger配置 - 测试环境禁用
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false 

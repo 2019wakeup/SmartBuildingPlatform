@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.smartcloudplatform.mapper.BreathSampleMapper">
+
+    <resultMap type="org.example.smartcloudplatform.entity.BreathSample" id="BreathSampleResult">
+        <id     property="sampleId"     column="sampleID"      />
+        <result property="dataTaken"    column="dataTaken"     />
+        <result property="userId"       column="userID"        />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+    </resultMap>
+
+    <sql id="selectBreathSampleVo">
+        select bs.sampleID, bs.dataTaken, bs.userID, bs.create_by, bs.create_time, bs.update_by, bs.update_time, bs.remark
+        from BreathSample bs
+    </sql>
+
+    <select id="selectBreathSampleList" parameterType="BreathSample" resultMap="BreathSampleResult">
+        <include refid="selectBreathSampleVo"/>
+        <where>
+            <if test="sampleId != null and sampleId != 0">
+                AND bs.sampleID = #{sampleId}
+            </if>
+            <if test="userId != null and userId != 0">
+                AND bs.userID = #{userId}
+            </if>
+            <if test="dataTaken != null">
+                AND date(bs.dataTaken) = date(#{dataTaken})
+            </if>
+        </where>
+        order by bs.create_time desc
+    </select>
+
+    <select id="selectBreathSampleById" parameterType="Long" resultMap="BreathSampleResult">
+        <include refid="selectBreathSampleVo"/>
+        where bs.sampleID = #{sampleId}
+    </select>
+
+    <select id="selectBreathSamplesByUserId" parameterType="Long" resultMap="BreathSampleResult">
+        <include refid="selectBreathSampleVo"/>
+        where bs.userID = #{userId}
+        order by bs.create_time desc
+    </select>
+
+    <insert id="insertBreathSample" parameterType="BreathSample" useGeneratedKeys="true" keyProperty="sampleId">
+        insert into BreathSample(
+        <if test="sampleId != null and sampleId != 0">sampleID,</if>
+        <if test="dataTaken != null">dataTaken,</if>
+        <if test="userId != null and userId != 0">userID,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="sampleId != null and sampleId != 0">#{sampleId},</if>
+        <if test="dataTaken != null">#{dataTaken},</if>
+        <if test="userId != null and userId != 0">#{userId},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        sysdate()
+        )
+    </insert>
+
+    <update id="updateBreathSample" parameterType="BreathSample">
+        update BreathSample
+        <set>
+            <if test="dataTaken != null">dataTaken = #{dataTaken},</if>
+            <if test="userId != null and userId != 0">userID = #{userId},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </set>
+        where sampleID = #{sampleId}
+    </update>
+
+    <delete id="deleteBreathSampleById" parameterType="Long">
+        delete from BreathSample where sampleID = #{sampleId}
+    </delete>
+
+    <delete id="deleteBreathSampleByIds" parameterType="Long">
+        delete from BreathSample where sampleID in
+        <foreach collection="array" item="sampleId" open="(" separator="," close=")">
+            #{sampleId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBreathSampleByUserId" parameterType="Long">
+        delete from BreathSample where userID = #{userId}
+    </delete>
+
+</mapper> 
