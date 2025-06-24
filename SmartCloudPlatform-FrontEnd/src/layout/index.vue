@@ -3,13 +3,13 @@
     <!-- 侧边栏 -->
     <div class="sidebar">
       <div class="logo-container">
-        <h2>智能云平台<br/>管理系统</h2>
+        <h2>智能云平台<br />管理系统</h2>
       </div>
       <el-menu
-        :default-active="activeMenu"
-        class="sidebar-menu"
-        :router="true"
-        unique-opened
+          :default-active="activeMenu"
+          class="sidebar-menu"
+          :router="true"
+          unique-opened
       >
         <el-menu-item index="/home" class="menu-item" :class="{ active: activeMenu === '/home' }">
           <el-icon><HomeFilled /></el-icon>
@@ -92,48 +92,54 @@
 
     <!-- 修改密码对话框 -->
     <el-dialog
-      v-model="changePasswordVisible"
-      title="修改密码"
-      width="400px"
-      @close="resetPasswordForm"
+        v-model="changePasswordVisible"
+        title="修改密码"
+        width="400px"
+        @close="resetPasswordForm"
     >
       <el-form
-        ref="passwordFormRef"
-        :model="passwordForm"
-        :rules="passwordRules"
-        label-width="80px"
+          ref="passwordFormRef"
+          :model="passwordForm"
+          :rules="passwordRules"
+          label-width="80px"
       >
         <el-form-item label="旧密码" prop="oldPassword">
-          <el-input
-            v-model="passwordForm.oldPassword"
-            type="password"
-            placeholder="请输入旧密码"
-            show-password
-          />
+          <el-input v-model="passwordForm.oldPassword" type="password" placeholder="请输入旧密码" show-password />
         </el-form-item>
         <el-form-item label="新密码" prop="newPassword">
-          <el-input
-            v-model="passwordForm.newPassword"
-            type="password"
-            placeholder="请输入新密码"
-            show-password
-          />
+          <el-input v-model="passwordForm.newPassword" type="password" placeholder="请输入新密码" show-password />
         </el-form-item>
         <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input
-            v-model="passwordForm.confirmPassword"
-            type="password"
-            placeholder="请再次输入新密码"
-            show-password
-          />
+          <el-input v-model="passwordForm.confirmPassword" type="password" placeholder="请再次输入新密码" show-password />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="changePasswordVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleChangePassword" :loading="passwordLoading">
-            确定
-          </el-button>
+          <el-button type="primary" @click="handleChangePassword" :loading="passwordLoading">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <!-- 退出登录确认对话框 -->
+    <el-dialog
+        v-model="logoutConfirmVisible"
+        title="确认退出登录"
+        width="360px"
+        center
+    >
+      <div class="logout-dialog-body">
+        <el-avatar :size="48" :src="userInfo?.avatar">
+          <el-icon><User /></el-icon>
+        </el-avatar>
+        <p class="logout-message">
+          确定要退出当前账户 <strong>{{ userInfo?.userName || userInfo?.account || '用户' }}</strong> 吗？
+        </p>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="logoutConfirmVisible = false">取消</el-button>
+          <el-button type="danger" @click="confirmLogout">退出登录</el-button>
         </span>
       </template>
     </el-dialog>
@@ -141,42 +147,40 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage, ElMessageBox, type FormInstance } from 'element-plus'
-import { 
-  User, 
-  UserFilled, 
-  Key, 
-  HomeFilled, 
-  Grid, 
-  ArrowDown, 
-  Lock, 
-  SwitchButton 
+import { ElMessage, type FormInstance } from 'element-plus'
+import {
+  User,
+  UserFilled,
+  Key,
+  HomeFilled,
+  Grid,
+  ArrowDown,
+  Lock,
+  SwitchButton
 } from '@element-plus/icons-vue'
 import { logout, changePassword } from '@/api/auth'
 import { getUserInfo as getStoredUserInfo, clearAuth } from '@/utils/auth'
 
+// 状态变量
 const route = useRoute()
 const router = useRouter()
 
 const userInfo = ref<any>(null)
 const changePasswordVisible = ref(false)
+const logoutConfirmVisible = ref(false)
 const passwordLoading = ref(false)
 const passwordFormRef = ref<FormInstance>()
 
-// 修改密码表单
 const passwordForm = ref({
   oldPassword: '',
   newPassword: '',
   confirmPassword: ''
 })
 
-// 密码验证规则
 const passwordRules = {
-  oldPassword: [
-    { required: true, message: '请输入旧密码', trigger: 'blur' }
-  ],
+  oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
   newPassword: [
     { required: true, message: '请输入新密码', trigger: 'blur' },
     { min: 6, max: 20, message: '密码长度在6-20个字符之间', trigger: 'blur' }
@@ -196,83 +200,63 @@ const passwordRules = {
   ]
 }
 
-const activeMenu = computed(() => {
-  return route.path
-})
+const activeMenu = computed(() => route.path)
 
 const currentPageTitle = computed(() => {
-  const routeMap: { [key: string]: string } = {
+  const map: Record<string, string> = {
     '/home': '首页',
     '/service-hub': 'Service Hub',
     '/user': '用户管理',
     '/role': '角色管理',
     '/permission': '权限管理'
   }
-  return routeMap[route.path] || '系统管理'
+  return map[route.path] || '系统管理'
 })
 
-// 处理用户下拉菜单命令
-const handleUserCommand = async (command: string) => {
-  switch (command) {
-    case 'profile':
-      ElMessage.info('个人中心功能开发中')
-      break
-    case 'changePassword':
-      changePasswordVisible.value = true
-      break
-    case 'logout':
-      await handleLogout()
-      break
+// 用户下拉菜单
+const handleUserCommand = (command: string) => {
+  if (command === 'profile') {
+    ElMessage.info('个人中心功能开发中')
+  } else if (command === 'changePassword') {
+    changePasswordVisible.value = true
+  } else if (command === 'logout') {
+    logoutConfirmVisible.value = true
   }
 }
 
-// 处理登出
-const handleLogout = async () => {
+const confirmLogout = async () => {
+  logoutConfirmVisible.value = false
   try {
-    await ElMessageBox.confirm('确定要退出登录吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning'
-    })
-    
-    try {
-      await logout()
-    } catch (error) {
-      // 即使登出API失败，也要清除本地认证信息
-      console.error('登出API调用失败:', error)
-    }
-    
-    clearAuth()
-    ElMessage.success('已成功退出登录')
-    router.push('/login')
-  } catch (error) {
-    // 用户取消登出
+    await logout()
+  } catch (e) {
+    console.warn('登出 API 异常', e)
   }
+  clearAuth()
+  ElMessage.success('已成功退出登录')
+  router.push('/login')
 }
 
-// 处理修改密码
 const handleChangePassword = async () => {
   if (!passwordFormRef.value) return
-  
+
   await passwordFormRef.value.validate(async (valid) => {
     if (valid) {
       passwordLoading.value = true
       try {
-        const response = await changePassword({
+        const res = await changePassword({
           oldPassword: passwordForm.value.oldPassword,
           newPassword: passwordForm.value.newPassword
         })
-        
-        if (response.success) {
+        if (res.success) {
           ElMessage.success('密码修改成功，请重新登录')
           changePasswordVisible.value = false
           clearAuth()
           router.push('/login')
         } else {
-          ElMessage.error(response.msg || '密码修改失败')
+          ElMessage.error(res.msg || '密码修改失败')
         }
-      } catch (error: any) {
-        ElMessage.error(error.message || '密码修改失败')
+      } catch (e: any) {
+        ElMessage.error(e.message || '密码修改失败')
       } finally {
         passwordLoading.value = false
       }
@@ -280,24 +264,18 @@ const handleChangePassword = async () => {
   })
 }
 
-// 重置密码表单
 const resetPasswordForm = () => {
   passwordForm.value = {
     oldPassword: '',
     newPassword: '',
     confirmPassword: ''
   }
-  if (passwordFormRef.value) {
-    passwordFormRef.value.resetFields()
-  }
+  passwordFormRef.value?.resetFields()
 }
 
-// 获取用户信息
 const fetchUserInfo = () => {
-  const storedUser = getStoredUserInfo()
-  if (storedUser) {
-    userInfo.value = storedUser
-  }
+  const user = getStoredUserInfo()
+  if (user) userInfo.value = user
 }
 
 onMounted(() => {
@@ -310,170 +288,119 @@ onMounted(() => {
   display: flex;
   height: 100vh;
 }
-
 .sidebar {
   width: 260px;
-  background: #ffffff;
+  background: #fff;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.1);
   display: flex;
   flex-direction: column;
 }
-
 .logo-container {
   padding: 30px 20px;
-  border-bottom: 1px solid #f0f0f0;
   text-align: center;
+  border-bottom: 1px solid #f0f0f0;
 }
-
 .logo-container h2 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1f2937;
-  line-height: 1.4;
-  margin: 0;
   background: linear-gradient(135deg, #667eea, #764ba2);
   background-clip: text;
-  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
 }
-
 .sidebar-menu {
   flex: 1;
-  border: none;
   padding-top: 20px;
+  border: none;
 }
-
-.menu-item {
+.menu-item,
+.sub-menu-item {
   margin: 0 20px 8px 20px;
   border-radius: 8px;
   height: 48px;
   line-height: 48px;
 }
-
-.menu-item:hover {
-  background-color: #f3f4f6;
+.menu-item:hover,
+.sub-menu-item:hover {
+  background: #f3f4f6;
 }
-
-.menu-item.active {
-  background-color: #4f46e5;
-  color: #ffffff;
+.menu-item.active,
+.sub-menu-item.active {
+  background: #4f46e5;
+  color: #fff;
 }
-
-.menu-item.active .el-icon {
-  color: #ffffff;
+.menu-item.active .el-icon,
+.sub-menu-item.active .el-icon {
+  color: #fff;
 }
-
-.sub-menu-item {
-  margin: 0 10px 4px 10px;
-  border-radius: 6px;
-  height: 40px;
-  line-height: 40px;
-}
-
 .content-area {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
-
 .header {
   height: 60px;
-  background: #ffffff;
-  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  align-items: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
-
 .header-left {
   display: flex;
   align-items: center;
 }
-
-.breadcrumb {
-  display: flex;
-  align-items: center;
-}
-
 .current-page {
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
 }
-
 .header-right {
   display: flex;
   align-items: center;
 }
-
 .user-info {
   display: flex;
   align-items: center;
-  gap: 8px;
   cursor: pointer;
+  gap: 8px;
   padding: 8px 12px;
   border-radius: 8px;
-  transition: background-color 0.2s;
+  transition: 0.2s;
 }
-
 .user-info:hover {
-  background-color: #f3f4f6;
+  background: #f3f4f6;
 }
-
 .username {
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
 }
-
 .dropdown-icon {
   font-size: 12px;
   color: #9ca3af;
   transition: transform 0.2s;
 }
-
 .user-info:hover .dropdown-icon {
   transform: rotate(180deg);
 }
-
 .main-content {
   flex: 1;
-  padding: 20px;
   overflow-y: auto;
   background: #f5f5f5;
+  padding: 20px;
 }
-
 .dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
-
-/* 深度选择器修改Element Plus样式 */
-:deep(.el-sub-menu__title) {
-  margin: 0 20px 4px 20px;
-  border-radius: 8px;
-  height: 48px;
-  line-height: 48px;
+.logout-dialog-body {
+  text-align: center;
+  padding: 10px;
 }
-
-:deep(.el-sub-menu__title:hover) {
-  background-color: #f3f4f6;
+.logout-message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #374151;
 }
-
-:deep(.el-sub-menu.is-active .el-sub-menu__title) {
-  background-color: #4f46e5;
-  color: #ffffff;
-}
-
-:deep(.el-sub-menu.is-active .el-sub-menu__title .el-icon) {
-  color: #ffffff;
-}
-
-:deep(.el-menu--collapse .el-sub-menu__title) {
-  margin: 0 10px 4px 10px;
-}
-</style> 
+</style>
