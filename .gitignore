@@ -43,6 +43,3 @@ Test Results*.xml
 
 ### modules in Front end ###
 /SmartCloudPlatform-FrontEnd/node_modules/
-
-### application.yml ###
-/src/main/resources/application.yml
