@@ -8,10 +8,16 @@ import org.example.smartcloudplatform.common.TableDataInfo;
 import org.example.smartcloudplatform.entity.User;
 import org.example.smartcloudplatform.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.example.smartcloudplatform.common.JwtUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户信息
@@ -24,6 +30,12 @@ import java.util.List;
 public class SysUserController {
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     /**
      * 获取用户列表
@@ -50,6 +62,74 @@ public class SysUserController {
             ajax.put(AjaxResult.DATA_TAG, sysUser);
         }
         return ajax;
+    }
+
+    /**
+     * 个人信息
+     */
+    @Operation(summary = "获取当前用户信息", description = "获取当前登录用户的个人信息")
+    @GetMapping("/profile")
+    public AjaxResult profile(@RequestHeader("Authorization") String token) {
+        token = token.startsWith("Bearer ") ? token.substring(7) : token;
+        Long userId = jwtUtils.getUserIdFromToken(token);
+        User user = userService.selectUserById(userId);
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("user", user);
+        return ajax;
+    }
+
+    /**
+     * 修改个人信息
+     */
+    @Operation(summary = "修改当前用户信息", description = "修改当前登录用户的个人信息")
+    @PutMapping("/profile")
+    public AjaxResult updateProfile(@RequestHeader("Authorization") String token, @RequestBody User user) {
+        token = token.startsWith("Bearer ") ? token.substring(7) : token;
+        Long loginUserId = jwtUtils.getUserIdFromToken(token);
+        User loginUser = userService.selectUserById(loginUserId);
+
+        loginUser.setUserName(user.getUserName());
+        loginUser.setPhone(user.getPhone());
+        loginUser.setEmail(user.getEmail());
+
+        if (userService.updateUserProfile(loginUser) > 0) {
+            return AjaxResult.success();
+        }
+        return AjaxResult.error("修改个人信息异常，请联系管理员");
+    }
+
+    /**
+     * 头像上传
+     */
+    @Operation(summary = "用户头像上传", description = "上传并更新当前用户的头像")
+    @PostMapping("/avatar")
+    public AjaxResult avatar(@RequestHeader("Authorization") String token, @RequestParam("avatarfile") MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            token = token.startsWith("Bearer ") ? token.substring(7) : token;
+            Long userId = jwtUtils.getUserIdFromToken(token);
+
+            // 获取文件名
+            String fileName = file.getOriginalFilename();
+            // 获取文件的后缀名
+            String suffixName = fileName.substring(fileName.lastIndexOf("."));
+            // 生成新的文件名
+            fileName = UUID.randomUUID().toString() + suffixName;
+
+            String filePath = uploadPath + "/avatars/";
+            File dest = new File(filePath + fileName);
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
+            }
+            file.transferTo(dest);
+            String avatarUrl = "/uploads/avatars/" + fileName;
+
+            if (userService.updateUserAvatar(userId, avatarUrl)) {
+                AjaxResult ajax = AjaxResult.success();
+                ajax.put("imgUrl", avatarUrl);
+                return ajax;
+            }
+        }
+        return AjaxResult.error("上传图片异常，请联系管理员");
     }
 
     /**
@@ -168,4 +248,4 @@ public class SysUserController {
         // 简化实现，返回空的部门树
         return AjaxResult.success();
     }
-} 
+}
