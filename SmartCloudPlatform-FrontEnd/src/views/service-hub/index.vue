@@ -16,9 +16,9 @@ import QuickStats from '@/components/ServiceHub/QuickStats.vue'
 const router = useRouter()
 
 const stats = ref({
-  totalServices: 6,
-  activeServices: 2,
-  comingSoonServices: 4,
+  totalServices: 8,
+  activeServices: 5,
+  comingSoonServices: 3,
   categories: 4
 })
 

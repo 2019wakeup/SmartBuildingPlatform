@@ -67,6 +67,24 @@ const routes = [
         }
       },
       {
+        path: '/iot-dashboard',
+        name: 'IoTDashboard',
+        component: () => import('@/views/iot-dashboard/index.vue'),
+        meta: {
+          title: 'IoT数据监控',
+          icon: 'Monitor'
+        }
+      },
+      {
+        path: '/iot-device',
+        name: 'IoTDevice',
+        component: () => import('@/views/iot-device/index.vue'),
+        meta: {
+          title: 'IoT设备管理',
+          icon: 'Connection'
+        }
+      },
+      {
         path: '/profile',
         name: 'Profile',
         component: () => import('@/views/profile/index.vue'),

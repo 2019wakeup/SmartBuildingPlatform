@@ -19,6 +19,20 @@
           <el-icon><Grid /></el-icon>
           <span>Service Hub</span>
         </el-menu-item>
+        <el-sub-menu index="iot-management">
+          <template #title>
+            <el-icon><Monitor /></el-icon>
+            <span>IoT物联网</span>
+          </template>
+          <el-menu-item index="/iot-dashboard" class="sub-menu-item">
+            <el-icon><TrendCharts /></el-icon>
+            <span>数据监控</span>
+          </el-menu-item>
+          <el-menu-item index="/iot-device" class="sub-menu-item">
+            <el-icon><Connection /></el-icon>
+            <span>设备管理</span>
+          </el-menu-item>
+        </el-sub-menu>
         <el-sub-menu index="user-management">
           <template #title>
             <el-icon><User /></el-icon>
@@ -156,6 +170,9 @@ import {
   Key,
   HomeFilled,
   Grid,
+  Monitor,
+  TrendCharts,
+  Connection,
   ArrowDown,
   Lock,
   SwitchButton
@@ -206,6 +223,8 @@ const currentPageTitle = computed(() => {
   const map: Record<string, string> = {
     '/home': '首页',
     '/service-hub': 'Service Hub',
+    '/iot-dashboard': 'IoT数据监控',
+    '/iot-device': 'IoT设备管理',
     '/user': '用户管理',
     '/role': '角色管理',
     '/permission': '权限管理',

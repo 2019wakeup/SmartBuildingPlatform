@@ -36,6 +36,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**", "/doc.html", "/favicon.ico").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        // 允许IoT相关接口无需认证（用于设备数据上报和监控）
+                        .requestMatchers("/iot/data/webhook/**", "/iot/data/receive").permitAll()
+                        .requestMatchers("/iot/devices/statistics", "/iot/devices/status").permitAll()
+                        .requestMatchers("/iot/data/latest/**").permitAll()
                         // 其他请求需要认证
                         .anyRequest().authenticated()
                 )

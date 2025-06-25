@@ -38,11 +38,33 @@
     />
 
     <CategorySection
+        icon="Connection"
+        title="IoT物联网管理"
+        :cards="[
+        {
+          icon: 'Monitor',
+          title: 'IoT数据监控',
+          desc: '实时监控IoT设备数据，包括CO₂、TVOC、温湿度等传感器数据',
+          features: ['实时监控', '数据可视化', '状态告警'],
+          path: '/iot-dashboard'
+        },
+        {
+          icon: 'Connection',
+          title: 'IoT设备管理',
+          desc: '管理IoT设备的注册、状态监控和配置信息',
+          features: ['设备注册', '状态监控', '设备配置'],
+          path: '/iot-device'
+        }
+      ]"
+        @navigate="$emit('navigate', $event)"
+    />
+
+    <CategorySection
         icon="Setting"
         title="系统管理"
         :cards="[
         {
-          icon: 'Monitor',
+          icon: 'DataLine',
           title: '系统监控',
           desc: '监控系统运行状态，查看性能指标',
           features: ['性能监控', '日志管理', '告警通知'],
