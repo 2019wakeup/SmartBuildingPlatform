@@ -10,7 +10,7 @@
       <el-button type="success" @click="$emit('edit')"><el-icon><Edit /></el-icon>EDIT</el-button>
       <el-button type="danger" @click="$emit('delete')"><el-icon><Delete /></el-icon>DELETE</el-button>
       <el-button type="info" @click="$emit('search')"><el-icon><Search /></el-icon>SEARCH</el-button>
-      <el-button type="warning" @click="$emit('test-api')"><el-icon><Tools /></el-icon>测试API</el-button>
+      <el-button type="warning" @click="$emit('test-api')"><el-icon><Tools /></el-icon>Test API</el-button>
     </div>
   </div>
 </template>

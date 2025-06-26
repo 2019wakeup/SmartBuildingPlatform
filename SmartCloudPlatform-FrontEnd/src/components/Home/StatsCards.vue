@@ -17,10 +17,10 @@ import { User, UserFilled, Key, Connection } from '@element-plus/icons-vue'
 const props = defineProps<{ stats: { userCount: number; roleCount: number; permissionCount: number; onlineCount: number } }>()
 
 const items = [
-  { icon: User, label: '用户总数', count: props.stats.userCount, iconClass: 'user-icon' },
-  { icon: UserFilled, label: '角色总数', count: props.stats.roleCount, iconClass: 'role-icon' },
-  { icon: Key, label: '权限总数', count: props.stats.permissionCount, iconClass: 'permission-icon' },
-  { icon: Connection, label: '在线用户', count: props.stats.onlineCount, iconClass: 'online-icon' }
+  { icon: User, label: 'Total Users', count: props.stats.userCount, iconClass: 'user-icon' },
+  { icon: UserFilled, label: 'Total Roles', count: props.stats.roleCount, iconClass: 'role-icon' },
+  { icon: Key, label: 'Total Permissions', count: props.stats.permissionCount, iconClass: 'permission-icon' },
+  { icon: Connection, label: 'Online Users', count: props.stats.onlineCount, iconClass: 'online-icon' }
 ]
 </script>
 

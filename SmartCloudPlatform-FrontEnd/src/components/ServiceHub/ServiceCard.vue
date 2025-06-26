@@ -14,7 +14,7 @@
       <el-icon><ArrowRight /></el-icon>
     </div>
     <div class="coming-soon-badge" v-if="card.comingSoon">
-      即将上线
+                    Coming Soon
     </div>
   </div>
 </template>

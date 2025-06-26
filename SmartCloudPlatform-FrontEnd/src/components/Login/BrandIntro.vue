@@ -1,23 +1,23 @@
 <template>
   <div class="login-left">
     <div class="brand-info">
-      <h1 class="brand-title">智能云平台</h1>
-      <h2 class="brand-subtitle">Smart Cloud Platform</h2>
+      <h1 class="brand-title">Smart Cloud Platform</h1>
+      <h2 class="brand-subtitle">Intelligent Management System</h2>
       <p class="brand-description">
-        基于SpringBoot3 + MyBatis Plus的前后端分离管理系统
+        Full-stack separation management system based on SpringBoot3 + MyBatis Plus
       </p>
       <div class="feature-list">
         <div class="feature-item">
           <el-icon><Check /></el-icon>
-          <span>统一身份认证</span>
+          <span>Unified Authentication</span>
         </div>
         <div class="feature-item">
           <el-icon><Check /></el-icon>
-          <span>角色权限管理</span>
+          <span>Role & Permission Management</span>
         </div>
         <div class="feature-item">
           <el-icon><Check /></el-icon>
-          <span>安全访问控制</span>
+          <span>Secure Access Control</span>
         </div>
       </div>
     </div>

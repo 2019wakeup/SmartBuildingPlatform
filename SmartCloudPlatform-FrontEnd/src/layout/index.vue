@@ -3,7 +3,7 @@
     <!-- 侧边栏 -->
     <div class="sidebar">
       <div class="logo-container">
-        <h2>智能云平台<br />管理系统</h2>
+        <h2>Smart Cloud Platform<br />Management System</h2>
       </div>
       <el-menu
           :default-active="activeMenu"
@@ -13,7 +13,7 @@
       >
         <el-menu-item index="/home" class="menu-item" :class="{ active: activeMenu === '/home' }">
           <el-icon><HomeFilled /></el-icon>
-          <span>首页</span>
+          <span>Home</span>
         </el-menu-item>
         <el-menu-item index="/service-hub" class="menu-item" :class="{ active: activeMenu === '/service-hub' }">
           <el-icon><Grid /></el-icon>
@@ -27,46 +27,46 @@
               style="color: inherit; text-decoration: none; display: inline-block; inline-size: 100%;"
               target="_blank"
             >
-              录课回放
+              Video Recording
             </a>
           </span>
         </el-menu-item>
         <el-sub-menu index="iot-management">
           <template #title>
             <el-icon><Monitor /></el-icon>
-            <span>IoT物联网</span>
+            <span>IoT Network</span>
           </template>
           <el-menu-item index="/iot-dashboard" class="sub-menu-item">
             <el-icon><TrendCharts /></el-icon>
-            <span>数据监控</span>
+            <span>Data Monitoring</span>
           </el-menu-item>
           <el-menu-item index="/iot-device" class="sub-menu-item">
             <el-icon><Connection /></el-icon>
-            <span>设备管理</span>
+            <span>Device Management</span>
           </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="user-management">
           <template #title>
             <el-icon><User /></el-icon>
-            <span>用户管理</span>
+            <span>User Management</span>
           </template>
           <el-menu-item index="/user" class="sub-menu-item">
             <el-icon><User /></el-icon>
-            <span>用户列表</span>
+            <span>User List</span>
           </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="role-management">
           <template #title>
             <el-icon><Key /></el-icon>
-            <span>角色权限</span>
+            <span>Role & Permission</span>
           </template>
           <el-menu-item index="/role" class="sub-menu-item">
             <el-icon><UserFilled /></el-icon>
-            <span>角色管理</span>
+            <span>Role Management</span>
           </el-menu-item>
           <el-menu-item index="/permission" class="sub-menu-item">
             <el-icon><Key /></el-icon>
-            <span>权限管理</span>
+            <span>Permission Management</span>
           </el-menu-item>
         </el-sub-menu>
       </el-menu>
@@ -94,15 +94,15 @@
               <el-dropdown-menu>
                 <el-dropdown-item command="profile">
                   <el-icon><User /></el-icon>
-                  个人中心
+                  Profile
                 </el-dropdown-item>
                 <el-dropdown-item command="changePassword">
                   <el-icon><Lock /></el-icon>
-                  修改密码
+                  Change Password
                 </el-dropdown-item>
                 <el-dropdown-item divided command="logout">
                   <el-icon><SwitchButton /></el-icon>
-                  退出登录
+                  Logout
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -116,10 +116,10 @@
       </div>
     </div>
 
-    <!-- 修改密码对话框 -->
+    <!-- Change Password Dialog -->
     <el-dialog
         v-model="changePasswordVisible"
-        title="修改密码"
+        title="Change Password"
         width="400px"
         @close="resetPasswordForm"
     >
@@ -127,30 +127,30 @@
           ref="passwordFormRef"
           :model="passwordForm"
           :rules="passwordRules"
-          label-width="80px"
+          label-width="120px"
       >
-        <el-form-item label="旧密码" prop="oldPassword">
-          <el-input v-model="passwordForm.oldPassword" type="password" placeholder="请输入旧密码" show-password />
+        <el-form-item label="Old Password" prop="oldPassword">
+          <el-input v-model="passwordForm.oldPassword" type="password" placeholder="Enter old password" show-password />
         </el-form-item>
-        <el-form-item label="新密码" prop="newPassword">
-          <el-input v-model="passwordForm.newPassword" type="password" placeholder="请输入新密码" show-password />
+        <el-form-item label="New Password" prop="newPassword">
+          <el-input v-model="passwordForm.newPassword" type="password" placeholder="Enter new password" show-password />
         </el-form-item>
-        <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input v-model="passwordForm.confirmPassword" type="password" placeholder="请再次输入新密码" show-password />
+        <el-form-item label="Confirm Password" prop="confirmPassword">
+          <el-input v-model="passwordForm.confirmPassword" type="password" placeholder="Confirm new password" show-password />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="changePasswordVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleChangePassword" :loading="passwordLoading">确定</el-button>
+          <el-button @click="changePasswordVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="handleChangePassword" :loading="passwordLoading">Confirm</el-button>
         </span>
       </template>
     </el-dialog>
 
-    <!-- 退出登录确认对话框 -->
+    <!-- Logout Confirmation Dialog -->
     <el-dialog
         v-model="logoutConfirmVisible"
-        title="确认退出登录"
+        title="Confirm Logout"
         width="360px"
         center
     >
@@ -159,13 +159,13 @@
           <el-icon><User /></el-icon>
         </el-avatar>
         <p class="logout-message">
-          确定要退出当前账户 <strong>{{ userInfo?.userName || userInfo?.account || '用户' }}</strong> 吗？
+          Are you sure you want to logout from account <strong>{{ userInfo?.userName || userInfo?.account || 'User' }}</strong>?
         </p>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="logoutConfirmVisible = false">取消</el-button>
-          <el-button type="danger" @click="confirmLogout">退出登录</el-button>
+          <el-button @click="logoutConfirmVisible = false">Cancel</el-button>
+          <el-button type="danger" @click="confirmLogout">Logout</el-button>
         </span>
       </template>
     </el-dialog>
@@ -210,17 +210,17 @@ const passwordForm = ref({
 })
 
 const passwordRules = {
-  oldPassword: [{ required: true, message: '请输入旧密码', trigger: 'blur' }],
+  oldPassword: [{ required: true, message: 'Please enter old password', trigger: 'blur' }],
   newPassword: [
-    { required: true, message: '请输入新密码', trigger: 'blur' },
-    { min: 6, max: 20, message: '密码长度在6-20个字符之间', trigger: 'blur' }
+    { required: true, message: 'Please enter new password', trigger: 'blur' },
+    { min: 6, max: 20, message: 'Password length should be between 6-20 characters', trigger: 'blur' }
   ],
   confirmPassword: [
-    { required: true, message: '请再次输入新密码', trigger: 'blur' },
+    { required: true, message: 'Please confirm new password', trigger: 'blur' },
     {
       validator: (rule: any, value: string, callback: any) => {
         if (value !== passwordForm.value.newPassword) {
-          callback(new Error('两次输入的密码不一致'))
+          callback(new Error('Passwords do not match'))
         } else {
           callback()
         }
@@ -234,16 +234,16 @@ const activeMenu = computed(() => route.path)
 
 const currentPageTitle = computed(() => {
   const map: Record<string, string> = {
-    '/home': '首页',
+    '/home': 'Home',
     '/service-hub': 'Service Hub',
-    '/iot-dashboard': 'IoT数据监控',
-    '/iot-device': 'IoT设备管理',
-    '/user': '用户管理',
-    '/role': '角色管理',
-    '/permission': '权限管理',
-    '/profile': '个人中心'
+    '/iot-dashboard': 'IoT Data Monitoring',
+    '/iot-device': 'IoT Device Management',
+    '/user': 'User Management',
+    '/role': 'Role Management',
+    '/permission': 'Permission Management',
+    '/profile': 'Profile'
   }
-  return map[route.path] || '系统管理'
+  return map[route.path] || 'System Management'
 })
 
 // 用户下拉菜单
@@ -262,10 +262,10 @@ const confirmLogout = async () => {
   try {
     await logout()
   } catch (e) {
-    console.warn('登出 API 异常', e)
+    console.warn('Logout API error', e)
   }
   clearAuth()
-  ElMessage.success('已成功退出登录')
+  ElMessage.success('Successfully logged out')
   router.push('/login')
 }
 
@@ -281,15 +281,15 @@ const handleChangePassword = async () => {
           newPassword: passwordForm.value.newPassword
         })
         if (res.success) {
-          ElMessage.success('密码修改成功，请重新登录')
+          ElMessage.success('Password changed successfully, please login again')
           changePasswordVisible.value = false
           clearAuth()
           router.push('/login')
         } else {
-          ElMessage.error(res.msg || '密码修改失败')
+          ElMessage.error(res.msg || 'Password change failed')
         }
       } catch (e: any) {
-        ElMessage.error(e.message || '密码修改失败')
+        ElMessage.error(e.message || 'Password change failed')
       } finally {
         passwordLoading.value = false
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="quick-actions">
-    <h2 class="section-title">快速操作</h2>
+    <h2 class="section-title">Quick Actions</h2>
     <div class="action-grid">
       <div class="action-card" v-for="action in actions" :key="action.path" @click="$emit('navigate', action.path)">
         <div class="action-icon">
@@ -16,10 +16,10 @@
 <script setup lang="ts">
 import { Grid, User, UserFilled, Key } from '@element-plus/icons-vue'
 const actions = [
-  { path: '/service-hub', icon: Grid, title: 'Service Hub', desc: '访问所有系统功能模块' },
-  { path: '/user', icon: User, title: '用户管理', desc: '管理系统用户信息' },
-  { path: '/role', icon: UserFilled, title: '角色管理', desc: '配置用户角色权限' },
-  { path: '/permission', icon: Key, title: '权限管理', desc: '设置系统访问权限' }
+  { path: '/service-hub', icon: Grid, title: 'Service Hub', desc: 'Access all system functional modules' },
+  { path: '/user', icon: User, title: 'User Management', desc: 'Manage system user information' },
+  { path: '/role', icon: UserFilled, title: 'Role Management', desc: 'Configure user role permissions' },
+  { path: '/permission', icon: Key, title: 'Permission Management', desc: 'Set system access permissions' }
 ]
 </script>
 

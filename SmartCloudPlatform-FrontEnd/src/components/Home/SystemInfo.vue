@@ -1,21 +1,21 @@
 <template>
   <div class="system-info">
-    <h2 class="section-title">系统信息</h2>
+    <h2 class="section-title">System Information</h2>
     <div class="info-grid">
       <div class="info-card">
-        <h4>系统版本</h4>
+        <h4>System Version</h4>
         <p>v1.0.0</p>
       </div>
       <div class="info-card">
-        <h4>技术栈</h4>
+        <h4>Technology Stack</h4>
         <p>SpringBoot3 + Vue3 + TypeScript</p>
       </div>
       <div class="info-card">
-        <h4>数据库</h4>
+        <h4>Database</h4>
         <p>MySQL + MyBatis Plus</p>
       </div>
       <div class="info-card">
-        <h4>最后更新</h4>
+        <h4>Last Updated</h4>
         <p>{{ new Date().toLocaleDateString() }}</p>
       </div>
     </div>

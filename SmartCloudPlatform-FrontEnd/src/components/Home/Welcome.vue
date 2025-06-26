@@ -1,15 +1,15 @@
 <template>
   <div class="welcome-section">
     <div class="welcome-content">
-      <h1 class="welcome-title">欢迎使用智能云平台管理系统</h1>
-      <p class="welcome-subtitle">基于SpringBoot3 + MyBatis Plus的前后端分离管理系统</p>
+      <h1 class="welcome-title">Welcome to Smart Cloud Platform Management System</h1>
+      <p class="welcome-subtitle">Full-stack separation management system based on SpringBoot3 + MyBatis Plus</p>
       <div class="user-welcome" v-if="userInfo">
         <el-avatar :size="60" :src="userInfo.avatar">
           <el-icon><User /></el-icon>
         </el-avatar>
         <div class="user-info">
           <h3>{{ userInfo.userName || userInfo.account }}</h3>
-          <p>{{ userInfo.email || '暂无邮箱' }}</p>
+          <p>{{ userInfo.email || 'No Email' }}</p>
         </div>
       </div>
     </div>
