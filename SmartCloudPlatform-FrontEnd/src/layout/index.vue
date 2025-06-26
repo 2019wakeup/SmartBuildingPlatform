@@ -19,6 +19,18 @@
           <el-icon><Grid /></el-icon>
           <span>Service Hub</span>
         </el-menu-item>
+        <el-menu-item index="video-replay" class="menu-item">
+          <el-icon><VideoCamera /></el-icon>
+          <span>
+            <a
+              href="/recording.html"
+              style="color: inherit; text-decoration: none; display: inline-block; inline-size: 100%;"
+              target="_blank"
+            >
+              录课回放
+            </a>
+          </span>
+        </el-menu-item>
         <el-sub-menu index="iot-management">
           <template #title>
             <el-icon><Monitor /></el-icon>
@@ -175,7 +187,8 @@ import {
   Connection,
   ArrowDown,
   Lock,
-  SwitchButton
+  SwitchButton,
+  VideoCamera
 } from '@element-plus/icons-vue'
 import { logout, changePassword } from '@/api/auth'
 import { getUserInfo as getStoredUserInfo, clearAuth } from '@/utils/auth'
@@ -306,10 +319,10 @@ onMounted(() => {
 <style scoped>
 .main-container {
   display: flex;
-  height: 100vh;
+  block-size: 100vh;
 }
 .sidebar {
-  width: 260px;
+  inline-size: 260px;
   background: #fff;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.1);
   display: flex;
@@ -318,7 +331,7 @@ onMounted(() => {
 .logo-container {
   padding: 30px 20px;
   text-align: center;
-  border-bottom: 1px solid #f0f0f0;
+  border-block-end: 1px solid #f0f0f0;
 }
 .logo-container h2 {
   background: linear-gradient(135deg, #667eea, #764ba2);
@@ -330,14 +343,14 @@ onMounted(() => {
 }
 .sidebar-menu {
   flex: 1;
-  padding-top: 20px;
+  padding-block-start: 20px;
   border: none;
 }
 .menu-item,
 .sub-menu-item {
   margin: 0 20px 8px 20px;
   border-radius: 8px;
-  height: 48px;
+  block-size: 48px;
   line-height: 48px;
 }
 .menu-item:hover,
@@ -359,7 +372,7 @@ onMounted(() => {
   flex-direction: column;
 }
 .header {
-  height: 60px;
+  block-size: 60px;
   background: #fff;
   display: flex;
   justify-content: space-between;
@@ -419,7 +432,7 @@ onMounted(() => {
   padding: 10px;
 }
 .logout-message {
-  margin-top: 10px;
+  margin-block-start: 10px;
   font-size: 14px;
   color: #374151;
 }
