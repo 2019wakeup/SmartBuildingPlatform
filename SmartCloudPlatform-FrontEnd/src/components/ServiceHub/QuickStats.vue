@@ -1,22 +1,22 @@
 <template>
   <div class="quick-stats">
-    <h2 class="section-title">系统概览</h2>
+    <h2 class="section-title">System Overview</h2>
     <div class="stats-grid">
       <div class="stat-item">
         <div class="stat-number">{{ stats.totalServices }}</div>
-        <div class="stat-label">总服务数</div>
+        <div class="stat-label">Total Services</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">{{ stats.activeServices }}</div>
-        <div class="stat-label">可用服务</div>
+        <div class="stat-label">Available Services</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">{{ stats.comingSoonServices }}</div>
-        <div class="stat-label">即将上线</div>
+        <div class="stat-label">Coming Soon</div>
       </div>
       <div class="stat-item">
         <div class="stat-number">{{ stats.categories }}</div>
-        <div class="stat-label">功能分类</div>
+        <div class="stat-label">Categories</div>
       </div>
     </div>
   </div>

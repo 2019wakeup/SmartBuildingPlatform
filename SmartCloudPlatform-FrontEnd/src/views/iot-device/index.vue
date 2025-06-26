@@ -1,30 +1,30 @@
 <template>
   <div class="iot-device-management">
-    <!-- 页面头部 -->
+    <!-- Page Header -->
     <div class="page-header">
       <div class="header-title">
-        <h2>设备管理</h2>
-        <p>管理物联网设备的注册、状态和配置</p>
+        <h2>Device Management</h2>
+        <p>Manage IoT device registration, status and configuration</p>
       </div>
       <div class="header-actions">
         <el-button type="primary" @click="showRegisterDialog">
           <el-icon><Plus /></el-icon>
-          注册设备
+          Register Device
         </el-button>
         <el-button @click="handleCheckOfflineDevices" :loading="checkingOffline">
           <el-icon><Refresh /></el-icon>
-          检查离线设备
+          Check Offline Devices
         </el-button>
       </div>
     </div>
 
-    <!-- 搜索和筛选 -->
+    <!-- Search and Filter -->
     <div class="search-section">
       <el-row :gutter="20">
         <el-col :span="6">
           <el-input
             v-model="searchForm.deviceId"
-            placeholder="设备ID"
+            placeholder="Device ID"
             clearable
             @input="handleSearch"
           >
@@ -36,7 +36,7 @@
         <el-col :span="6">
           <el-input
             v-model="searchForm.deviceName"
-            placeholder="设备名称"
+            placeholder="Device Name"
             clearable
             @input="handleSearch"
           >
@@ -48,29 +48,29 @@
         <el-col :span="6">
           <el-select
             v-model="searchForm.deviceStatus"
-            placeholder="设备状态"
+            placeholder="Device Status"
             clearable
             @change="handleSearch"
           >
-            <el-option label="全部" value="" />
-            <el-option label="在线" value="online" />
-            <el-option label="离线" value="offline" />
+            <el-option label="All" value="" />
+            <el-option label="Online" value="online" />
+            <el-option label="Offline" value="offline" />
           </el-select>
         </el-col>
         <el-col :span="6">
           <el-button type="primary" @click="handleSearch">
             <el-icon><Search /></el-icon>
-            搜索
+            Search
           </el-button>
           <el-button @click="resetSearch">
             <el-icon><Refresh /></el-icon>
-            重置
+            Reset
           </el-button>
         </el-col>
       </el-row>
     </div>
 
-    <!-- 设备列表 -->
+    <!-- Device List -->
     <div class="table-section">
       <el-table
         :data="deviceList"
@@ -80,62 +80,62 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="device_id" label="设备ID" width="180" />
-        <el-table-column prop="device_name" label="设备名称" width="200" />
-        <el-table-column prop="device_location" label="设备位置" width="200" />
-        <el-table-column label="设备状态" width="100">
+        <el-table-column prop="device_id" label="Device ID" width="180" />
+        <el-table-column prop="device_name" label="Device Name" width="200" />
+        <el-table-column prop="device_location" label="Device Location" width="200" />
+        <el-table-column label="Device Status" width="100">
           <template #default="{ row }">
             <el-tag
               :type="row.device_status === 'online' ? 'success' : 'danger'"
               size="small"
             >
-              {{ row.device_status === 'online' ? '在线' : '离线' }}
+              {{ row.device_status === 'online' ? 'Online' : 'Offline' }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="当前数据" width="300">
+        <el-table-column label="Current Data" width="300">
           <template #default="{ row }">
             <div class="device-data">
               <span v-if="row.current_co2_ppm">CO₂: {{ row.current_co2_ppm }}ppm</span>
               <span v-if="row.current_tvoc_ppb">TVOC: {{ row.current_tvoc_ppb }}ppb</span>
-              <span v-if="row.current_env_temperature">温度: {{ row.current_env_temperature }}℃</span>
-              <span v-if="row.current_env_humidity">湿度: {{ row.current_env_humidity }}%</span>
+              <span v-if="row.current_env_temperature">Temp: {{ row.current_env_temperature }}℃</span>
+              <span v-if="row.current_env_humidity">Humidity: {{ row.current_env_humidity }}%</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="last_update_time" label="最后更新时间" width="180">
+        <el-table-column prop="last_update_time" label="Last Update Time" width="180">
           <template #default="{ row }">
             {{ row.last_update_time ? formatTime(row.last_update_time) : '--' }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
+        <el-table-column label="Actions" width="200" fixed="right">
           <template #default="{ row }">
             <el-button
               type="primary"
               size="small"
               @click="viewDeviceDetail(row)"
             >
-              详情
+              Details
             </el-button>
             <el-button
               type="success"
               size="small"
               @click="viewDeviceData(row)"
             >
-              数据
+              Data
             </el-button>
             <el-button
               type="danger"
               size="small"
               @click="deleteDevice(row)"
             >
-              删除
+              Delete
             </el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <!-- 分页 -->
+      <!-- Pagination -->
       <div class="pagination-container">
         <el-pagination
           v-model:current-page="pagination.currentPage"
@@ -149,10 +149,10 @@
       </div>
     </div>
 
-    <!-- 设备注册对话框 -->
+    <!-- Device Registration Dialog -->
     <el-dialog
       v-model="registerDialogVisible"
-      title="注册新设备"
+      title="Register New Device"
       width="500px"
       @close="resetRegisterForm"
     >
@@ -160,83 +160,83 @@
         ref="registerFormRef"
         :model="registerForm"
         :rules="registerRules"
-        label-width="100px"
+        label-width="120px"
       >
-        <el-form-item label="设备ID" prop="deviceId">
+        <el-form-item label="Device ID" prop="deviceId">
           <el-input
             v-model="registerForm.deviceId"
-            placeholder="请输入设备ID"
+            placeholder="Enter device ID"
           />
         </el-form-item>
-        <el-form-item label="设备名称" prop="deviceName">
+        <el-form-item label="Device Name" prop="deviceName">
           <el-input
             v-model="registerForm.deviceName"
-            placeholder="请输入设备名称"
+            placeholder="Enter device name"
           />
         </el-form-item>
-        <el-form-item label="设备位置" prop="deviceLocation">
+        <el-form-item label="Device Location" prop="deviceLocation">
           <el-input
             v-model="registerForm.deviceLocation"
-            placeholder="请输入设备位置"
+            placeholder="Enter device location"
           />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="registerDialogVisible = false">取消</el-button>
+          <el-button @click="registerDialogVisible = false">Cancel</el-button>
           <el-button type="primary" @click="handleRegisterDevice" :loading="registerLoading">
-            确定
+            Confirm
           </el-button>
         </span>
       </template>
     </el-dialog>
 
-    <!-- 设备详情对话框 -->
+    <!-- Device Details Dialog -->
     <el-dialog
       v-model="detailDialogVisible"
-      title="设备详情"
+      title="Device Details"
       width="800px"
     >
       <div v-if="selectedDevice" class="device-detail">
         <el-descriptions :column="2" border>
-          <el-descriptions-item label="设备ID">
+          <el-descriptions-item label="Device ID">
             {{ selectedDevice.device_id }}
           </el-descriptions-item>
-          <el-descriptions-item label="设备名称">
+          <el-descriptions-item label="Device Name">
             {{ selectedDevice.device_name }}
           </el-descriptions-item>
-          <el-descriptions-item label="设备位置">
+          <el-descriptions-item label="Device Location">
             {{ selectedDevice.device_location }}
           </el-descriptions-item>
-          <el-descriptions-item label="设备状态">
+          <el-descriptions-item label="Device Status">
             <el-tag
               :type="selectedDevice.device_status === 'online' ? 'success' : 'danger'"
             >
-              {{ selectedDevice.device_status === 'online' ? '在线' : '离线' }}
+              {{ selectedDevice.device_status === 'online' ? 'Online' : 'Offline' }}
             </el-tag>
           </el-descriptions-item>
-          <el-descriptions-item label="CO₂浓度">
+          <el-descriptions-item label="CO₂ Concentration">
             {{ selectedDevice.current_co2_ppm || '--' }} ppm
           </el-descriptions-item>
-          <el-descriptions-item label="TVOC浓度">
+          <el-descriptions-item label="TVOC Concentration">
             {{ selectedDevice.current_tvoc_ppb || '--' }} ppb
           </el-descriptions-item>
-          <el-descriptions-item label="芯片温度">
+          <el-descriptions-item label="Chip Temperature">
             {{ selectedDevice.current_chip_temperature || '--' }} ℃
           </el-descriptions-item>
-          <el-descriptions-item label="环境温度">
+          <el-descriptions-item label="Environmental Temperature">
             {{ selectedDevice.current_env_temperature || '--' }} ℃
           </el-descriptions-item>
-          <el-descriptions-item label="环境湿度">
+          <el-descriptions-item label="Environmental Humidity">
             {{ selectedDevice.current_env_humidity || '--' }} %
           </el-descriptions-item>
-          <el-descriptions-item label="最后更新时间">
+          <el-descriptions-item label="Last Update Time">
             {{ selectedDevice.last_update_time ? formatTime(selectedDevice.last_update_time) : '--' }}
           </el-descriptions-item>
-          <el-descriptions-item label="最后离线时间">
+          <el-descriptions-item label="Last Offline Time">
             {{ selectedDevice.last_offline_time ? formatTime(selectedDevice.last_offline_time) : '--' }}
           </el-descriptions-item>
-          <el-descriptions-item label="创建时间">
+          <el-descriptions-item label="Creation Time">
             {{ selectedDevice.create_time ? formatTime(selectedDevice.create_time) : '--' }}
           </el-descriptions-item>
         </el-descriptions>
@@ -295,18 +295,18 @@ const registerForm = reactive({
   deviceLocation: ''
 })
 
-// 表单验证规则
+// Form validation rules
 const registerRules = {
   deviceId: [
-    { required: true, message: '请输入设备ID', trigger: 'blur' },
-    { min: 3, max: 50, message: '设备ID长度在3-50个字符之间', trigger: 'blur' }
+    { required: true, message: 'Please enter device ID', trigger: 'blur' },
+    { min: 3, max: 50, message: 'Device ID length should be between 3-50 characters', trigger: 'blur' }
   ],
   deviceName: [
-    { required: true, message: '请输入设备名称', trigger: 'blur' },
-    { min: 2, max: 100, message: '设备名称长度在2-100个字符之间', trigger: 'blur' }
+    { required: true, message: 'Please enter device name', trigger: 'blur' },
+    { min: 2, max: 100, message: 'Device name length should be between 2-100 characters', trigger: 'blur' }
   ],
   deviceLocation: [
-    { max: 200, message: '设备位置长度不能超过200个字符', trigger: 'blur' }
+    { max: 200, message: 'Device location length cannot exceed 200 characters', trigger: 'blur' }
   ]
 }
 
@@ -318,8 +318,8 @@ const loadDeviceList = async () => {
     deviceList.value = response.data.rows || []
     pagination.total = response.data.total || 0
   } catch (error) {
-    console.error('加载设备列表失败:', error)
-    ElMessage.error('加载设备列表失败')
+    console.error('Failed to load device list:', error)
+    ElMessage.error('Failed to load device list')
   } finally {
     loading.value = false
   }
@@ -371,14 +371,14 @@ const handleRegisterDevice = async () => {
         registerLoading.value = true
         const response = await registerDevice(registerForm)
         if (response.success) {
-          ElMessage.success('设备注册成功')
+          ElMessage.success('Device registered successfully')
           registerDialogVisible.value = false
           loadDeviceList()
         } else {
-          ElMessage.error(response.msg || '设备注册失败')
+          ElMessage.error(response.msg || 'Device registration failed')
         }
       } catch (error: any) {
-        ElMessage.error(error.message || '设备注册失败')
+        ElMessage.error(error.message || 'Device registration failed')
       } finally {
         registerLoading.value = false
       }
@@ -401,19 +401,19 @@ const viewDeviceData = (device: IoTDeviceStatus) => {
 const deleteDevice = async (device: IoTDeviceStatus) => {
   try {
     await ElMessageBox.confirm(
-      `确定要删除设备 "${device.device_name}" 吗？`,
-      '确认删除',
+      `Are you sure you want to delete device "${device.device_name}"?`,
+      'Confirm Delete',
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Cancel',
         type: 'warning'
       }
     )
     
-    // 这里应该调用删除设备的API
-    ElMessage.success('删除功能待实现')
+    // TODO: Call delete device API here
+    ElMessage.success('Delete function to be implemented')
   } catch {
-    ElMessage.info('已取消删除')
+    ElMessage.info('Delete operation cancelled')
   }
 }
 
@@ -422,13 +422,13 @@ const handleCheckOfflineDevices = async () => {
     checkingOffline.value = true
     const response = await checkOfflineDevices(10)
     if (response.success) {
-      ElMessage.success(response.msg || '离线设备检查完成')
+      ElMessage.success(response.msg || 'Offline device check completed')
       loadDeviceList()
     } else {
-      ElMessage.error(response.msg || '检查失败')
+      ElMessage.error(response.msg || 'Check failed')
     }
   } catch (error: any) {
-    ElMessage.error(error.message || '检查离线设备失败')
+    ElMessage.error(error.message || 'Failed to check offline devices')
   } finally {
     checkingOffline.value = false
   }

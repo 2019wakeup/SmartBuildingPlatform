@@ -9,7 +9,7 @@ const routes = [
     name: 'Login',
     component: () => import('@/views/login/index.vue'),
     meta: {
-      title: '登录',
+      title: 'Login',
       requiresAuth: false
     }
   },
@@ -26,7 +26,7 @@ const routes = [
         name: 'Home',
         component: () => import('@/views/home/index.vue'),
         meta: {
-          title: '首页',
+          title: 'Home',
           icon: 'HomeFilled'
         }
       },
@@ -44,7 +44,7 @@ const routes = [
         name: 'UserManagement',
         component: () => import('@/views/user/index.vue'),
         meta: {
-          title: '用户管理',
+          title: 'User Management',
           icon: 'User'
         }
       },
@@ -53,7 +53,7 @@ const routes = [
         name: 'RoleManagement',
         component: () => import('@/views/role/index.vue'),
         meta: {
-          title: '角色管理',
+          title: 'Role Management',
           icon: 'UserFilled'
         }
       },
@@ -62,7 +62,7 @@ const routes = [
         name: 'PermissionManagement',
         component: () => import('@/views/permission/index.vue'),
         meta: {
-          title: '权限管理',
+          title: 'Permission Management',
           icon: 'Key'
         }
       },
@@ -71,7 +71,7 @@ const routes = [
         name: 'IoTDashboard',
         component: () => import('@/views/iot-dashboard/index.vue'),
         meta: {
-          title: 'IoT数据监控',
+          title: 'IoT Data Monitoring',
           icon: 'Monitor'
         }
       },
@@ -80,7 +80,7 @@ const routes = [
         name: 'IoTDevice',
         component: () => import('@/views/iot-device/index.vue'),
         meta: {
-          title: 'IoT设备管理',
+          title: 'IoT Device Management',
           icon: 'Connection'
         }
       },
@@ -89,7 +89,7 @@ const routes = [
         name: 'Profile',
         component: () => import('@/views/profile/index.vue'),
         meta: {
-          title: '个人中心',
+          title: 'Profile',
           hidden: true
         }
       }
@@ -109,26 +109,26 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  // 设置页面标题
+  // Set page title
   if (to.meta?.title) {
-    document.title = `${to.meta.title} - 智能云平台管理系统`
+    document.title = `${to.meta.title} - Smart Cloud Platform Management System`
   } else {
-    document.title = '智能云平台管理系统'
+    document.title = 'Smart Cloud Platform Management System'
   }
 
-  // 检查是否需要认证
+  // Check if authentication is required
   if (to.meta?.requiresAuth !== false) {
-    // 需要认证的页面
+    // Pages that require authentication
     if (isLoggedIn()) {
       next()
     } else {
-      ElMessage.warning('请先登录')
+      ElMessage.warning('Please login first')
       next('/login')
     }
   } else {
-    // 不需要认证的页面（如登录页）
+    // Pages that don't require authentication (like login page)
     if (to.path === '/login' && isLoggedIn()) {
-      // 已登录用户访问登录页，重定向到首页
+      // Redirect logged-in users from login page to home
       next('/')
     } else {
       next()

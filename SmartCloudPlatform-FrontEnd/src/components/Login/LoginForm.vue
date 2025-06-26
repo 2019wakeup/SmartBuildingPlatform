@@ -2,8 +2,8 @@
   <div class="login-right">
     <div class="login-form-container">
       <div class="login-header">
-        <h3>欢迎登录</h3>
-        <p>请输入您的账号和密码</p>
+        <h3>Welcome</h3>
+        <p>Please enter your account and password</p>
       </div>
       <el-form
           ref="loginFormRef"
@@ -15,7 +15,7 @@
         <el-form-item prop="account">
           <el-input
               v-model="loginForm.account"
-              placeholder="请输入账号"
+              placeholder="Enter account"
               size="large"
               :prefix-icon="User"
               clearable
@@ -25,7 +25,7 @@
           <el-input
               v-model="loginForm.password"
               type="password"
-              placeholder="请输入密码"
+              placeholder="Enter password"
               size="large"
               :prefix-icon="Lock"
               show-password
@@ -40,12 +40,12 @@
               @click="handleLogin"
               class="login-button"
           >
-            {{ loading ? '登录中...' : '登录' }}
+            {{ loading ? 'Logging in...' : 'Login' }}
           </el-button>
         </el-form-item>
       </el-form>
       <div class="login-footer">
-        <p class="demo-account">演示账号: admin / 123456</p>
+        <p class="demo-account">Demo Account: admin / 123456</p>
       </div>
     </div>
   </div>
@@ -69,10 +69,10 @@ const loginForm = reactive<LoginRequest>({
 })
 
 const loginRules = {
-  account: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+  account: [{ required: true, message: 'Please enter account', trigger: 'blur' }],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度至少6位', trigger: 'blur' }
+    { required: true, message: 'Please enter password', trigger: 'blur' },
+    { min: 6, message: 'Password length must be at least 6 characters', trigger: 'blur' }
   ]
 }
 
@@ -87,13 +87,13 @@ const handleLogin = async () => {
           const { token, user } = response.data
           setToken(token)
           setUserInfo(user)
-          ElMessage.success('登录成功')
+          ElMessage.success('Login successful')
           emit('loginSuccess')
         } else {
-          ElMessage.error(response.msg || '登录失败')
+          ElMessage.error(response.msg || 'Login failed')
         }
       } catch (error: any) {
-        ElMessage.error(error.message || '登录失败，请检查网络连接')
+        ElMessage.error(error.message || 'Login failed, please check network connection')
       } finally {
         loading.value = false
       }

@@ -38,36 +38,36 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response
       
-      // 处理401未授权错误
+      // Handle 401 Unauthorized error
       if (status === 401) {
-        ElMessage.error('登录已过期，请重新登录')
+        ElMessage.error('Login expired, please login again')
         clearAuth()
         router.push('/login')
         return Promise.reject(error)
       }
       
-      // 处理403禁止访问错误
+      // Handle 403 Forbidden error
       if (status === 403) {
-        const errorMsg = data?.message || data?.msg || '没有权限访问该资源'
+        const errorMsg = data?.message || data?.msg || 'No permission to access this resource'
         ElMessage.error(errorMsg)
-        console.error('403错误详情:', data)
+        console.error('403 error details:', data)
         return Promise.reject(new Error(errorMsg))
       }
       
-      // 处理400错误（通常是验证错误）
+      // Handle 400 error (usually validation error)
       if (status === 400) {
-        const errorMsg = data?.message || data?.msg || '请求参数错误'
+        const errorMsg = data?.message || data?.msg || 'Request parameter error'
         ElMessage.error(errorMsg)
-        console.error('400错误详情:', data)
+        console.error('400 error details:', data)
         return Promise.reject(new Error(errorMsg))
       }
       
-      // 处理其他HTTP错误
-      const errorMsg = data?.msg || data?.message || `请求失败: ${status}`
+      // Handle other HTTP errors
+      const errorMsg = data?.msg || data?.message || `Request failed: ${status}`
       ElMessage.error(errorMsg)
       return Promise.reject(new Error(errorMsg))
     } else {
-      ElMessage.error(error.message || '网络错误')
+      ElMessage.error(error.message || 'Network error')
     }
     
     return Promise.reject(error)

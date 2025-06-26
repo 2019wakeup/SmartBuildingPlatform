@@ -1,7 +1,7 @@
 <template>
   <div class="page-header">
     <h1 class="page-title">Service Hub</h1>
-    <p class="page-description">系统功能服务中心 - 快速访问用户管理、权限控制和IoT物联网等所有管理功能</p>
+    <p class="page-description">System Service Hub - Quick access to user management, permission control, IoT network and all management functions</p>
   </div>
 </template>
 
