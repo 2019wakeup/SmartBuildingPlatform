@@ -64,6 +64,17 @@
                 </el-form-item>
               </el-form>
             </el-tab-pane>
+            <el-tab-pane label="健康报告" name="healthreport">
+              <div v-if="showHealthReportHistory">
+                <HealthReportHistory :stu-id="user.user_id || user.userId || 0" />
+              </div>
+              <div v-else>
+                <HealthReportCard 
+                  :stu-id="user.user_id || user.userId || 0" 
+                  @view-history="showHealthHistory"
+                />
+              </div>
+            </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
@@ -77,15 +88,48 @@ import { ElMessage } from 'element-plus';
 import { getUserProfile, updateUserProfile, uploadAvatar } from '@/api/user';
 import { getToken } from '@/utils/auth';
 import type { UploadProps } from 'element-plus'
+import HealthReportCard from '@/components/HealthReport/HealthReportCard.vue'
+import HealthReportHistory from '@/components/HealthReport/HealthReportHistory.vue'
+import axios from 'axios'
+
+// 创建axios实例
+const axiosInstance = axios.create({
+  baseURL: '/api',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+// 添加请求拦截器
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  }
+)
+
+// 添加响应拦截器，直接返回data
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response.data
+  }
+)
 
 const user = ref({
   userName: '',
   phone: '',
   email: '',
-  avatar: ''
+  avatar: '',
+  userId: 0,
+  user_id: 0
 });
 const activeTab = ref('userinfo');
 const userRef = ref();
+const showHealthReportHistory = ref(false);
 
 const uploadHeaders = {
   Authorization: 'Bearer ' + getToken()
@@ -104,14 +148,24 @@ const rules = reactive({
 });
 
 const getProfile = async () => {
-  const res = await getUserProfile();
-  if (res.data.user) {
-    user.value = res.data.user;
-    if (user.value.avatar && !user.value.avatar.startsWith('http')) {
-        // Assuming the backend returns a relative path like /uploads/avatars/...
-        // You might need to adjust the base URL depending on your setup.
+  try {
+    // 直接调用axios获取原始响应
+    const response = await axiosInstance.get('/system/user/profile');
+    console.log('getProfile raw API response:', response);
+    
+    if (response.code === 200 && response.user) {
+      user.value = response.user;
+      console.log('User data set to:', user.value);
+      console.log('User ID (user_id):', user.value.user_id);
+      
+      if (user.value.avatar && !user.value.avatar.startsWith('http')) {
         user.value.avatar = `http://localhost:8080/api${user.value.avatar}`;
+      }
+    } else {
+      console.error('Failed to get user profile:', response);
     }
+  } catch (error) {
+    console.error('Error getting user profile:', error);
   }
 };
 
@@ -146,6 +200,10 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     return false
   }
   return true
+}
+
+const showHealthHistory = () => {
+  showHealthReportHistory.value = true
 }
 
 onMounted(() => {

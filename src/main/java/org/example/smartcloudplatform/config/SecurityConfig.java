@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers("/iot/data/webhook/**", "/iot/data/receive").permitAll()
                         .requestMatchers("/iot/devices/statistics", "/iot/devices/status").permitAll()
                         .requestMatchers("/iot/data/latest/**").permitAll()
+                        // 允许健康报告提交接口无需认证（用于外部设备数据上报）
+                        .requestMatchers("/health-report/submit").permitAll()
                         // 其他请求需要认证
                         .anyRequest().authenticated()
                 )

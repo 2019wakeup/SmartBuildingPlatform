@@ -66,6 +66,29 @@ export interface BreathSample extends BaseEntity {
   user?: User
 }
 
+// 健康报告类型
+export interface HealthReport extends BaseEntity {
+  id?: number
+  fingerPrint: string
+  finger_print?: string  // 支持下划线命名
+  dataTaken: string
+  data_taken?: string    // 支持下划线命名
+  reportData: string
+  report_data?: string   // 支持下划线命名
+  stuId: number
+  stu_id?: number        // 支持下划线命名
+  user?: User
+}
+
+// 健康报告数据点类型
+export interface HealthReportDataPoint {
+  timestamp: number
+  temperature_c: number
+  pressure_hpa: number
+  humidity_percent: number
+  gas_resistance_ohm?: number
+}
+
 // API响应类型 - 匹配后端AjaxResult结构
 export interface AjaxResult {
   code: number
