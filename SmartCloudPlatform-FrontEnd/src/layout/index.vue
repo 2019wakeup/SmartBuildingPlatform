@@ -3,6 +3,7 @@
     <!-- 侧边栏 -->
     <div class="sidebar">
       <div class="logo-container">
+        <img src="@/LOGO.jpg" alt="Logo" class="logo-image" />
         <h2>Smart Cloud Platform<br />Management System</h2>
       </div>
       <el-menu
@@ -332,6 +333,13 @@ onMounted(() => {
   padding: 30px 20px;
   text-align: center;
   border-block-end: 1px solid #f0f0f0;
+}
+.logo-image {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  border-radius: 8px;
 }
 .logo-container h2 {
   background: linear-gradient(135deg, #667eea, #764ba2);

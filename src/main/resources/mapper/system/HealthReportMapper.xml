@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.smartcloudplatform.mapper.HealthReportMapper">
+
+    <resultMap type="org.example.smartcloudplatform.entity.HealthReport" id="HealthReportResult">
+        <id     property="id"           column="id"            />
+        <result property="fingerPrint"  column="finger_print"  />
+        <result property="dataTaken"    column="data_taken"    />
+        <result property="reportData"   column="report_data"   />
+        <result property="stuId"        column="stu_id"        />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+        <result property="remark"       column="remark"        />
+    </resultMap>
+
+    <sql id="selectHealthReportVo">
+        select hr.id, hr.finger_print, hr.data_taken, hr.report_data, hr.stu_id, 
+               hr.create_by, hr.create_time, hr.update_by, hr.update_time, hr.remark
+        from health_report hr
+    </sql>
+
+    <select id="selectHealthReportList" parameterType="HealthReport" resultMap="HealthReportResult">
+        <include refid="selectHealthReportVo"/>
+        <where>
+            <if test="id != null and id != 0">
+                AND hr.id = #{id}
+            </if>
+            <if test="stuId != null and stuId != 0">
+                AND hr.stu_id = #{stuId}
+            </if>
+            <if test="dataTaken != null">
+                AND date(hr.data_taken) = date(#{dataTaken})
+            </if>
+            <if test="fingerPrint != null and fingerPrint != ''">
+                AND hr.finger_print like concat('%', #{fingerPrint}, '%')
+            </if>
+        </where>
+        order by hr.data_taken desc
+    </select>
+
+    <select id="selectHealthReportById" parameterType="Long" resultMap="HealthReportResult">
+        <include refid="selectHealthReportVo"/>
+        where hr.id = #{id}
+    </select>
+
+    <insert id="insertHealthReport" parameterType="HealthReport" useGeneratedKeys="true" keyProperty="id">
+        insert into health_report(
+        <if test="fingerPrint != null and fingerPrint != ''">finger_print,</if>
+        <if test="dataTaken != null">data_taken,</if>
+        <if test="reportData != null and reportData != ''">report_data,</if>
+        <if test="stuId != null">stu_id,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        create_time
+        )values(
+        <if test="fingerPrint != null and fingerPrint != ''">#{fingerPrint},</if>
+        <if test="dataTaken != null">#{dataTaken},</if>
+        <if test="reportData != null and reportData != ''">#{reportData},</if>
+        <if test="stuId != null">#{stuId},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        <if test="remark != null and remark != ''">#{remark},</if>
+        NOW()
+        )
+    </insert>
+
+    <update id="updateHealthReport" parameterType="HealthReport">
+        update health_report
+        <set>
+            <if test="fingerPrint != null and fingerPrint != ''">finger_print = #{fingerPrint},</if>
+            <if test="dataTaken != null">data_taken = #{dataTaken},</if>
+            <if test="reportData != null and reportData != ''">report_data = #{reportData},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = NOW()
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHealthReportById" parameterType="Long">
+        delete from health_report where id = #{id}
+    </delete>
+
+    <delete id="deleteHealthReportByIds" parameterType="Long">
+        delete from health_report where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteHealthReportByStuId" parameterType="Long">
+        delete from health_report where stu_id = #{stuId}
+    </delete>
+
+</mapper> 

@@ -1,15 +1,16 @@
 <template>
   <div class="welcome-section">
     <div class="welcome-content">
-      <h1 class="welcome-title">Welcome to Smart Cloud Platform Management System</h1>
-      <p class="welcome-subtitle">Full-stack separation management system based on SpringBoot3 + MyBatis Plus</p>
-      <div class="user-welcome" v-if="userInfo">
-        <el-avatar :size="60" :src="userInfo.avatar">
-          <el-icon><User /></el-icon>
-        </el-avatar>
-        <div class="user-info">
-          <h3>{{ userInfo.userName || userInfo.account }}</h3>
-          <p>{{ userInfo.email || 'No Email' }}</p>
+      <h1 class="welcome-title">Welcome</h1>
+    </div>
+    
+    <!-- College aerial view showcase -->
+    <div class="college-showcase">
+      <div class="college-image-container">
+        <img src="@/JEI.jpg" alt="Manchester Metropolitan Joint Institute, Hubei University" class="college-image" />
+        <div class="college-overlay">
+          <h3>Manchester Metropolitan Joint Institute</h3>
+          <p>Hubei University</p>
         </div>
       </div>
     </div>
@@ -17,8 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { User } from '@element-plus/icons-vue'
-defineProps<{ userInfo: any }>()
+// No props needed anymore
 </script>
 
 <style scoped>
@@ -31,30 +31,48 @@ defineProps<{ userInfo: any }>()
 }
 .welcome-content {
   text-align: center;
+  margin-bottom: 40px;
 }
 .welcome-title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 10px;
 }
-.welcome-subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 30px;
-}
-.user-welcome {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+
+/* College aerial view styles */
+.college-showcase {
   margin-top: 30px;
 }
-.user-info h3 {
-  margin: 0 0 5px 0;
-  font-size: 1.3rem;
+.college-image-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
-.user-info p {
+.college-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+}
+.college-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  padding: 30px 20px 20px;
+  text-align: center;
+}
+.college-overlay h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+.college-overlay p {
   margin: 0;
-  opacity: 0.8;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
 }
 </style>

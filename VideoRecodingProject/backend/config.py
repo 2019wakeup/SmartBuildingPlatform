@@ -3,5 +3,5 @@ class Config:
     MYSQL_PORT = 3306  # 注意：默认的3306
     MYSQL_USER = 'root'
     MYSQL_PASSWORD = '123'
-    MYSQL_DB = 'course_system'
+    MYSQL_DB = 'cloudplatform'
     # 移除非全大写变量
